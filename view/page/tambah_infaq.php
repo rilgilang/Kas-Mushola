@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = addInfaq($data);
 
     if ($result == "success") {
-        // header("Refresh:0");
+        header("Refresh:0");
     } else {
         $error = $result;
     }

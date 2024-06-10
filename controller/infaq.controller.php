@@ -39,8 +39,6 @@ function addInfaq($data)
     $stmt->execute();
     $kasmasuk = $stmt->fetch();
 
-    print_r($latestTrx);
-
     //insert kas
     $query = "INSERT INTO kas (id_kasmasuk, saldo_kas) VALUES (?, ?)";
 

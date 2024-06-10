@@ -1,26 +1,27 @@
 <?php
-include 'bootstrap/db.php';
-include 'middleware/auth.php';
-include 'controller/kas.controller.php';
+include '../../bootstrap/db.php';
+include '../../middleware/auth.php';
+include '../../controller/pengeluaran.controller.php';
+include '../../controller/kas.controller.php';
 
 checkLogin();
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $jumlah = $_POST['jumlah'];
-    $tanggal = $_POST['tanggal'];
+    $jenis_transaksi_keluar = $_POST['jenis_transaksi_keluar'];
+    $tgl_transaksi_keluar = $_POST['tgl_transaksi_keluar'];
+    $jml_transaksi_keluar = $_POST['jml_transaksi_keluar'];
     $keterangan = $_POST['keterangan'];
-    $jenis = $_POST['jenis'];
 
     $data = [
-        "jumlah" => $jumlah,
-        "tanggal" => $tanggal,
-        "uraian" => $keterangan,
-        "jenis" => $jenis
+        "jenis_transaksi_keluar" => $jenis_transaksi_keluar,
+        "tgl_transaksi_keluar" => $tgl_transaksi_keluar,
+        "jml_transaksi_keluar" => $jml_transaksi_keluar,
+        "keterangan" => $keterangan,
     ];
 
-    $result = addKas($data);
+    $result = addPengeluaran($data);
 
     if ($result == "success") {
         header("Refresh:0");
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html>
 
 <head>
-    <?php include("component/header.php"); ?>
+    <?php include("../component/header.php"); ?>
 </head>
 
 <body>
@@ -49,34 +50,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Tambah Kas</h4>
+                                <h4 class="card-title">Tambah Pengeluaran</h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
-                                <form class="forms-sample" method="post" action="tambah_kas.php">
+                                <form class="forms-sample" method="post" action="tambah_pengeluaran.php">
+
+                                    <div class="form-group row">
+                                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Jenis Pengeluaran</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="exampleInputEmail2" name="jenis_transaksi_keluar">
+                                        </div>
+                                    </div>
 
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Jumlah</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Jumlah" name="jumlah">
+                                            <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Jumlah" name="jml_transaksi_keluar">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Tanggal</label>
-                                        <div class="col-sm-9">
-                                            <input type="date" class="form-control" id="exampleInputEmail2" placeholder="DD/MM/YYYY" name="tanggal">
+                                        <div class="col-sm-2">
+                                            <input type="date" class="form-control" id="exampleInputEmail2" placeholder="DD/MM/YYYY" name="tgl_transaksi_keluar">
                                         </div>
                                     </div>
-
-                                    <div class="form-group row">
-                                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Jenis</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" id="exampleSelectGender" name="jenis">
-                                                <option value="pemasukan">Pemasukan</option>
-                                                <option value="pengeluran">Pengeluaran</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
 
                                     <div class="form-group row">
                                         <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Keterangan</label>

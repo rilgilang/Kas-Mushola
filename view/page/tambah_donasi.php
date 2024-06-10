@@ -1,29 +1,30 @@
 <?php
-include 'bootstrap/db.php';
-include 'middleware/auth.php';
-include 'controller/kas.controller.php';
+include '../../bootstrap/db.php';
+include '../../middleware/auth.php';
+include '../../controller/donasi.controller.php';
+include '../../controller/kas.controller.php';
 
 checkLogin();
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $jumlah = $_POST['jumlah'];
-    $tanggal = $_POST['tanggal'];
+    $nama_donatur = $_POST['nama_donatur'];
+    $tgl_donasi = $_POST['tgl_donasi'];
+    $jml_donasi = $_POST['jml_donasi'];
     $keterangan = $_POST['keterangan'];
-    $jenis = $_POST['jenis'];
 
     $data = [
-        "jumlah" => $jumlah,
-        "tanggal" => $tanggal,
-        "uraian" => $keterangan,
-        "jenis" => $jenis
+        "nama_donatur" => $nama_donatur,
+        "tgl_donasi" => $tgl_donasi,
+        "jml_donasi" => $jml_donasi,
+        "keterangan" => $keterangan,
     ];
 
-    $result = addKas($data);
+    $result = addDonasi($data);
 
     if ($result == "success") {
-        header("Refresh:0");
+        // header("Refresh:0");
     } else {
         $error = $result;
     }
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html>
 
 <head>
-    <?php include("component/header.php"); ?>
+    <?php include("../component/header.php"); ?>
 </head>
 
 <body>
@@ -49,34 +50,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Tambah Kas</h4>
+                                <h4 class="card-title">Tambah Donasi</h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
-                                <form class="forms-sample" method="post" action="tambah_kas.php">
+                                <form class="forms-sample" method="post" action="tambah_donasi.php">
+
+                                    <div class="form-group row">
+                                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Nama Donatur</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="exampleInputEmail2" name="nama_donatur">
+                                        </div>
+                                    </div>
 
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Jumlah</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Jumlah" name="jumlah">
+                                            <input type="text" class="form-control" id="exampleInputUsername2" placeholder="Jumlah" name="jml_donasi">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Tanggal</label>
-                                        <div class="col-sm-9">
-                                            <input type="date" class="form-control" id="exampleInputEmail2" placeholder="DD/MM/YYYY" name="tanggal">
+                                        <div class="col-sm-2">
+                                            <input type="date" class="form-control" id="exampleInputEmail2" placeholder="DD/MM/YYYY" name="tgl_donasi">
                                         </div>
                                     </div>
-
-                                    <div class="form-group row">
-                                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Jenis</label>
-                                        <div class="col-sm-9">
-                                            <select class="form-control" id="exampleSelectGender" name="jenis">
-                                                <option value="pemasukan">Pemasukan</option>
-                                                <option value="pengeluran">Pengeluaran</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
 
                                     <div class="form-group row">
                                         <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Keterangan</label>
