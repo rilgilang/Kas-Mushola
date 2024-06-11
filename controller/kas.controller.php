@@ -41,11 +41,14 @@ function getAllKas($filter)
          d.tgl_donasi BETWEEN '$startDate' AND '$endDate' OR
          kk.tgl_kaskeluar BETWEEN '$startDate' AND '$endDate' OR
          dt.tgl_transaksi_keluar BETWEEN '$startDate' AND '$endDate')";
+    } else {
+        $filter_query = "ORDER BY kas_created_at ASC";
     }
 
     $query = "SELECT 
             k.id_kas,
             COALESCE(k.saldo_kas, 0) AS saldo_kas,
+            COALESCE(k.created_at, '0000-00-00') AS kas_created_at,
             COALESCE(km.tgl_kasmasuk, '0000-00-00') AS tgl_kasmasuk,
             COALESCE(km.jml_kasmasuk, 0) AS jml_kasmasuk,
             COALESCE(km.ket_kasmasuk, 'No Description') AS ket_kasmasuk,
@@ -272,22 +275,30 @@ function generateKasKeluarId($lastId)
 }
 
 
-function generateAllIdForKasMasuk($type)
+function generateAllIdForKas($type)
 {
 
     $donasi_id = "KD0001";
     $infaq_id = "KI0001";
     $kasmasuk_id = "KM001";
+    $detail_transaksi_keluar_id = "DK001";
+    $kaskeluar_id = "KK001";
     $kas_id = "K001";
     $kasmasuk = getLatestKasMasuk();
+    $kaskeluar = getLatestKasKeluar();
     $kas = getLatestKas();
 
     if ($kasmasuk != false) {
-        $kasmasuk_id = generateDonasiId($kasmasuk['id_kasmasuk']);
+        $kasmasuk_id = generateKasMasukId($kasmasuk['id_kasmasuk']);
+    }
+
+
+    if ($kaskeluar != false) {
+        $kaskeluar_id = generateKasKeluarId($kaskeluar['id_kaskeluar']);
     }
 
     if ($kas != false) {
-        $kas_id = generateDonasiId($kas_id['id_kas']);
+        $kas_id = generateKasId($kas['id_kas']);
     }
 
     switch ($type) {
@@ -301,7 +312,14 @@ function generateAllIdForKasMasuk($type)
         case 'infaq':
             $infaq = getLatestInfaq();
             if ($infaq != false) {
-                $donasi_id = generateDonasiId($infaq['id_infaq']);
+                $infaq_id = generateInfaqId($infaq['id_infaq']);
+            }
+            break;
+
+        case 'pengeluaran':
+            $pengeluaran = getLatestPengeluaran();
+            if ($pengeluaran != false) {
+                $detail_transaksi_keluar_id = generatePengeluaranId($pengeluaran['id_transaksi_keluar']);
             }
             break;
 
@@ -311,8 +329,10 @@ function generateAllIdForKasMasuk($type)
 
     return [
         'donasi_id' => $donasi_id,
-        'infaq_id' => $kas_id,
+        'infaq_id' => $infaq_id,
         'kasmasuk_id' => $kasmasuk_id,
         'kas_id' => $kas_id,
+        'transaksi_keluar_id' => $detail_transaksi_keluar_id,
+        'kas_keluar_id' => $kaskeluar_id
     ];
 }

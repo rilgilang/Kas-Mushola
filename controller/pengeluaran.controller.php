@@ -8,43 +8,36 @@ function addPengeluaran($data)
     //insert transaksi_keluar
     global $pdo;
 
-    $query = "INSERT INTO detail_transaksi_keluar (jenis_transaksi_keluar, tgl_transaksi_keluar, jml_transaksi_keluar) VALUES (?, ?, ?)";
+    $ids = generateAllIdForKas("pengeluaran");
+
+    $query = "INSERT INTO detail_transaksi_keluar (id_transaksi_keluar ,jenis_transaksi_keluar, tgl_transaksi_keluar, jml_transaksi_keluar) VALUES (?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['jenis_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar']]);
+        $stmt->execute([$ids['transaksi_keluar_id'], $data['jenis_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar']]);
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
-
-
-    $stmt = $pdo->prepare("SELECT * FROM detail_transaksi_keluar ORDER BY created_at DESC LIMIT 1;");
-    $stmt->execute();
-    $transaksi_keluar = $stmt->fetch();
 
     //insert kas_keluar
 
-    $query = "INSERT INTO kas_keluar (tgl_kaskeluar, jml_kaskeluar, ket_kaskeluar, id_transaksi_keluar) VALUES (?, ?, ?, ?)";
+    $query = "INSERT INTO kas_keluar (id_kaskeluar, tgl_kaskeluar, jml_kaskeluar, ket_kaskeluar, id_transaksi_keluar) VALUES (?, ?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['keterangan'], $transaksi_keluar['id_transaksi_keluar']]);
+        $stmt->execute([$ids['kas_keluar_id'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['keterangan'], $ids['transaksi_keluar_id']]);
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM kas_keluar ORDER BY created_at DESC LIMIT 1;");
-    $stmt->execute();
-    $kaskeluar = $stmt->fetch();
-
     //insert kas
-    $query = "INSERT INTO kas (id_kaskeluar, saldo_kas) VALUES (?, ?)";
+    $query = "INSERT INTO kas (id_kas ,id_kaskeluar, saldo_kas) VALUES (?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$kaskeluar['id_kaskeluar'], $latestTrx['latest_saldo'] - $data['jml_transaksi_keluar']]);
+        $stmt->execute([$ids['kas_id'], $ids['kas_keluar_id'], $latestTrx['latest_saldo'] - $data['jml_transaksi_keluar']]);
         return "success";
     } catch (PDOException $e) {
         //error
@@ -100,3 +93,35 @@ function generatePengeluaranId($lastId)
         return $result;
     }
 }
+
+function getLatestPengeluaran()
+{
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT * FROM detail_transaksi_keluar ORDER BY created_at DESC LIMIT 1;");
+    $stmt->execute();
+    $donasi = $stmt->fetch();
+
+    if (empty($donasi)) {
+        return false;
+    }
+
+    return $donasi;
+}
+
+//
+// function generatePengeluaranId($lastId)
+// {
+//     $result = "DK";
+//     $newNumber = intval(substr($lastId, 3)) + 1;
+//     if (strlen($newNumber) <= 3) {
+//         for ($x = 0; $x <= 3 - strlen($newNumber); $x++) {
+//             $result = $result . "0";
+//         }
+//         $result = $result . $newNumber;
+//         return $result;
+//     } else {
+//         $result = $newNumber;
+//         return $result;
+//     }
+// }

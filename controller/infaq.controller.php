@@ -7,7 +7,7 @@ function addInfaq($data)
     //insert infaq
     global $pdo;
 
-    $ids = generateAllIdForKasMasuk("infaq");
+    $ids = generateAllIdForKas("infaq");
 
     $query = "INSERT INTO infaq (id_infaq, jenis_infaq, tgl_infaq, jml_infaq) VALUES (?, ?, ?, ?)";
 
@@ -108,4 +108,20 @@ function getDetailedInfaq()
     }
 
     return $kas;
+}
+
+function generateInfaqId($lastId)
+{
+    $result = "KI";
+    $newNumber = intval(substr($lastId, 3)) + 1;
+    if (strlen($newNumber) <= 3) {
+        for ($x = 0; $x <= 3 - strlen($newNumber); $x++) {
+            $result = $result . "0";
+        }
+        $result = $result . $newNumber;
+        return $result;
+    } else {
+        $result = $newNumber;
+        return $result;
+    }
 }

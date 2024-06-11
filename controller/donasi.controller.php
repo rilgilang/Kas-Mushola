@@ -23,7 +23,7 @@ function addDonasi($data)
     //insert donasi
     global $pdo;
 
-    $ids = generateAllIdForKasMasuk("donasi");
+    $ids = generateAllIdForKas("donasi");
 
     $query = "INSERT INTO donasi (id_donasi, nama_donatur, tgl_donasi, jml_donasi) VALUES (?, ?, ?, ?)";
 
