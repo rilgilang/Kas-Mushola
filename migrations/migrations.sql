@@ -13,6 +13,7 @@ CREATE TABLE infaq (
     jenis_infaq CHAR(30),
     tgl_infaq DATE,
     jml_infaq INT(12)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create DONASI table
@@ -20,7 +21,8 @@ CREATE TABLE donasi (
     id_donasi VARCHAR(10) PRIMARY KEY,
     nama_donatur CHAR(30),
     tgl_donasi DATE,
-    jml_donasi INT(12)
+    jml_donasi INT(12),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create KAS_MASUK table
@@ -30,7 +32,8 @@ CREATE TABLE kas_masuk (
     jml_kasmasuk INT(12),
     ket_kasmasuk VARCHAR(100),
     id_infaq VARCHAR(10),
-    id_donasi VARCHAR(10)
+    id_donasi VARCHAR(10),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create KAS_KELUAR table
@@ -39,7 +42,8 @@ CREATE TABLE kas_keluar (
     tgl_kaskeluar DATE,
     jml_kaskeluar INT(12),
     ket_kaskeluar VARCHAR(100),
-    id_transaksi_keluar VARCHAR(10)
+    id_transaksi_keluar VARCHAR(10),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create KAS table
@@ -47,7 +51,8 @@ CREATE TABLE kas (
     id_kas VARCHAR(10) PRIMARY KEY,
     id_kasmasuk VARCHAR(10),
     id_kaskeluar VARCHAR(10),
-    saldo_kas INT(12)
+    saldo_kas INT(12),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Create DETAIL_TRANSAKSI_KELUAR table
@@ -55,7 +60,8 @@ CREATE TABLE detail_transaksi_keluar (
     id_transaksi_keluar VARCHAR(10) PRIMARY KEY,
     jenis_transaksi_keluar CHAR(30),
     tgl_transaksi_keluar DATE,
-    jml_transaksi_keluar INT(12)
+    jml_transaksi_keluar INT(12),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 

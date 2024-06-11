@@ -23,43 +23,36 @@ function addDonasi($data)
     //insert donasi
     global $pdo;
 
-    $query = "INSERT INTO donasi (nama_donatur, tgl_donasi, jml_donasi) VALUES (?, ?, ?)";
+    $ids = generateAllIdForKasMasuk("donasi");
+
+    $query = "INSERT INTO donasi (id_donasi, nama_donatur, tgl_donasi, jml_donasi) VALUES (?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['nama_donatur'], $data['tgl_donasi'], $data['jml_donasi']]);
+        $stmt->execute([$ids["donasi_id"], $data['nama_donatur'], $data['tgl_donasi'], $data['jml_donasi']]);
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
-
-
-    $stmt = $pdo->prepare("SELECT * FROM donasi ORDER BY tgl_donasi DESC LIMIT 1;");
-    $stmt->execute();
-    $donasi = $stmt->fetch();
 
     //insert kas_masuk
-
-    $query = "INSERT INTO kas_masuk (tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_donasi) VALUES (?, ?, ?, ?)";
+    $query = "INSERT INTO kas_masuk (id_kasmasuk, tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_donasi) VALUES (?, ?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['tgl_donasi'], $data['jml_donasi'], $data['keterangan'], $donasi['id_donasi']]);
+        $stmt->execute([$ids['kasmasuk_id'], $data['tgl_donasi'], $data['jml_donasi'], $data['keterangan'], $ids['donasi_id']]);
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
 
-    $stmt = $pdo->prepare("SELECT * FROM kas_masuk ORDER BY tgl_kasmasuk DESC LIMIT 1;");
-    $stmt->execute();
-    $kasmasuk = $stmt->fetch();
 
     //insert kas
-    $query = "INSERT INTO kas (id_kasmasuk, saldo_kas) VALUES (?, ?)";
+    $query = "INSERT INTO kas (id_kas ,id_kasmasuk, saldo_kas) VALUES (?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$kasmasuk['id_kasmasuk'], $latestTrx['latest_saldo'] + $data['jml_donasi']]);
+        $stmt->execute([$ids['kas_id'], $ids['kasmasuk_id'], $latestTrx['latest_saldo'] + $data['jml_donasi']]);
         return "success";
     } catch (PDOException $e) {
         //error
@@ -67,13 +60,70 @@ function addDonasi($data)
     }
 }
 
-function getAllDonasi()
+function getAllDonasi($filter)
 {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT * FROM donasi");
+    $filter_query = "";
+
+    if ($filter["start_date"] != "" && $filter["end_date"] != "") {
+        $startDate = $filter["start_date"];
+        $endDate = $filter["end_date"];
+
+        $filter_query = "WHERE tgl_donasi BETWEEN '$startDate' AND '$endDate' ";
+    }
+
+    $query = " SELECT 
+            d.id_donasi,
+            d.tgl_donasi,
+            d.nama_donatur,
+            d.jml_donasi,
+            COALESCE(km.id_kasmasuk, 0) AS id_kasmasuk,
+            COALESCE(km.tgl_kasmasuk, '0000-00-00') AS tgl_kasmasuk,
+            COALESCE(km.jml_kasmasuk, 0) AS jml_kasmasuk,
+            COALESCE(km.ket_kasmasuk, 'No Description') AS ket_kasmasuk
+        FROM 
+            donasi d
+        LEFT JOIN 
+            kas_masuk km ON d.id_donasi = km.id_donasi
+        $filter_query ;";
+
+    $stmt = $pdo->prepare($query);
     $stmt->execute();
     $kas = $stmt->fetchAll();
 
     return $kas;
+}
+
+function getLatestDonasi()
+{
+
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT * FROM donasi ORDER BY created_at DESC LIMIT 1;");
+    $stmt->execute();
+    $donasi = $stmt->fetch();
+
+    if (empty($donasi)) {
+        return false;
+    }
+
+    return $donasi;
+}
+
+
+function generateDonasiId($lastId)
+{
+    $result = "KD";
+    $newNumber = intval(substr($lastId, 3)) + 1;
+    if (strlen($newNumber) <= 3) {
+        for ($x = 0; $x <= 3 - strlen($newNumber); $x++) {
+            $result = $result . "0";
+        }
+        $result = $result . $newNumber;
+        return $result;
+    } else {
+        $result = $newNumber;
+        return $result;
+    }
 }
