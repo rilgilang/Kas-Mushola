@@ -93,6 +93,35 @@ function getAllKas($filter)
     return $kas;
 }
 
+function getKasMasukByInfaqId($infaq_id)
+{
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT * FROM kas_masuk WHERE id_infaq = ? DESC LIMIT 1;");
+    $stmt->execute([$infaq_id]);
+    $kas = $stmt->fetch();
+
+    if (empty($kas)) {
+        return false;
+    }
+
+    return $kas;
+}
+
+function getKasById($kas_id)
+{
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kas = ? DESC LIMIT 1;");
+    $stmt->execute();
+    $kas = $stmt->fetch();
+
+    if (empty($kas)) {
+        return false;
+    }
+
+    return $kas;
+}
 
 function getLatestTypeTrx()
 {
@@ -277,7 +306,6 @@ function generateKasKeluarId($lastId)
 
 function generateAllIdForKas($type)
 {
-
     $donasi_id = "KD0001";
     $infaq_id = "KI0001";
     $kasmasuk_id = "KM001";
@@ -335,4 +363,79 @@ function generateAllIdForKas($type)
         'transaksi_keluar_id' => $detail_transaksi_keluar_id,
         'kas_keluar_id' => $kaskeluar_id
     ];
+}
+
+
+function syncKasMasuk($data, $created_at)
+{
+    global $pdo;
+
+    //update kas masuk
+    $query = "UPDATE kas_masuk
+     SET tgl_kasmasuk = ?, jml_kasmasuk = ?, ket_kasmasuk = ?
+     WHERE created_at >= ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$data['tgl_infaq'], $data['jml_infaq'], $data['keterangan'], $created_at]);
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+function syncSaldo($math_op_query, $created_at)
+{
+    global $pdo;
+
+    //update kas
+    $query = "UPDATE kas
+       SET saldo_kas = $math_op_query
+       WHERE created_at >= ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$created_at]);
+        return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+
+function deleteKasMasuk($kasmasuk_id)
+{
+    global $pdo;
+
+    //update kas
+    $query = "DELETE FROM kas_masuk
+       WHERE id_kasmasuk = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$kasmasuk_id]);
+        return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+function deleteKas($kas_id)
+{
+    global $pdo;
+
+    //update kas
+    $query = "DELETE FROM kas
+       WHERE id_kas = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$kas_id]);
+        return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
 }

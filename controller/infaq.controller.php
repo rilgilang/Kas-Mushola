@@ -94,14 +94,13 @@ function getLatestInfaq()
     return $donasi;
 }
 
-
-function getDetailedInfaq()
+function getDetailedInfaqbyId($infaqId)
 {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT k.id_kas, k.saldo_kas, km.tgl_kasmasuk, km.jml_kasmasuk, i.jenis_infaq, i.tgl_infaq, i.jml_infaq FROM kas k JOIN kas_masuk km ON k.id_kasmasuk = km.id_kasmasuk JOIN  infaq i ON km.id_infaq = i.id_infaq ORDER BY  i.tgl_infaq DESC LIMIT 1;");
-    $stmt->execute();
-    $kas = $stmt->fetchAll();
+    $stmt = $pdo->prepare("SELECT k.id_kas, i.id_infaq, km.id_kasmasuk, k.saldo_kas, km.tgl_kasmasuk, km.jml_kasmasuk, km.ket_kasmasuk, i.jenis_infaq, i.tgl_infaq, i.jml_infaq, i.created_at FROM kas k JOIN kas_masuk km ON k.id_kasmasuk = km.id_kasmasuk JOIN  infaq i ON km.id_infaq = i.id_infaq WHERE i.id_infaq = ? LIMIT 1;");
+    $stmt->execute([$infaqId]);
+    $kas = $stmt->fetch();
 
     if (empty($kas)) {
         return false;
@@ -124,4 +123,71 @@ function generateInfaqId($lastId)
         $result = $newNumber;
         return $result;
     }
+}
+
+function getInfaqbyId($infaqId)
+{
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT * FROM infaq WHERE id_infaq = ? LIMIT 1;");
+    $stmt->execute([$infaqId]);
+    $kas = $stmt->fetch();
+
+    if (empty($kas)) {
+        return false;
+    }
+
+    return $kas;
+}
+
+function updateInfaq($infaqId, $data)
+{
+    global $pdo;
+
+    $infaq = getInfaqbyId($infaqId);
+    $dif_value =  $data['jml_infaq'] > $infaq['jml_infaq'] ? $data['jml_infaq'] -  $infaq['jml_infaq'] : $infaq['jml_infaq'] - $data['jml_infaq'];
+    $math_op_query = $data['jml_infaq'] > $infaq['jml_infaq'] ? "($dif_value + saldo_kas)" : "(saldo_kas - $dif_value)";
+
+    //update infaq
+    $query = "UPDATE infaq
+    SET jenis_infaq = ?, jml_infaq = ?, tgl_infaq = ?
+    WHERE id_infaq = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$data['jenis_infaq'], $data['jml_infaq'], $data['tgl_infaq'], $infaqId]);
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+
+    syncKasMasuk($data, $infaq['created_at']);
+
+    syncSaldo($math_op_query, $infaq['created_at']);
+}
+
+
+function deleteInfaq($infaqId)
+{
+    $infaq = getDetailedInfaqbyId($infaqId);
+    $dif_value = $infaq['jml_infaq'];
+
+    global $pdo;
+
+    //delete infaq
+    $query = "DELETE FROM infaq
+       WHERE id_infaq = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$infaq['id_infaq']]);
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+
+    deleteKasMasuk($infaq['id_kasmasuk']);
+    deleteKas($infaq['id_kas']);
+
+    syncSaldo("(saldo_kas - $dif_value)", $infaq['created_at']);
 }

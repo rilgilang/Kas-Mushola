@@ -109,6 +109,72 @@ function getLatestPengeluaran()
     return $donasi;
 }
 
+function getDetailedPengeluaranById($pengeluaran_id)
+{
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT k.id_kas, tk.id_transaksi_keluar, kk.id_kaskeluar ,k.saldo_kas, kk.ket_kaskeluar, kk.tgl_kaskeluar, kk.jml_kaskeluar, tk.tgl_transaksi_keluar, tk.jenis_transaksi_keluar, tk.jml_transaksi_keluar, tk.created_at FROM kas k JOIN kas_keluar kk ON k.id_kaskeluar = kk.id_kaskeluar JOIN detail_transaksi_keluar tk ON kk.id_transaksi_keluar = tk.id_transaksi_keluar WHERE tk.id_transaksi_keluar = ? LIMIT 1;");
+    $stmt->execute([$pengeluaran_id]);
+    $kas = $stmt->fetch();
+
+    if (empty($kas)) {
+        return false;
+    }
+
+    return $kas;
+}
+
+function updatePengeluaranById($pengeluaran_id, $data)
+{
+    global $pdo;
+
+    $pengeluaran = getDetailedPengeluaranById($pengeluaran_id);
+    $dif_value =  $data['jml_transaksi_keluar'] > $pengeluaran['jml_transaksi_keluar'] ? $data['jml_transaksi_keluar'] -  $pengeluaran['jml_transaksi_keluar'] : $pengeluaran['jml_transaksi_keluar'] - $data['jml_transaksi_keluar'];
+    $math_op_query = $data['jml_transaksi_keluar'] > $pengeluaran['jml_transaksi_keluar'] ? "($dif_value + saldo_kas)" : "(saldo_kas - $dif_value)";
+
+    //update pengeluaran
+    $query = "UPDATE detail_transaksi_keluar
+    SET jenis_transaksi_keluar = ?, jml_transaksi_keluar = ?, tgl_transaksi_keluar = ?
+    WHERE id_transaksi_keluar = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$data['jenis_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['tgl_transaksi_keluar'], $pengeluaran_id]);
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+
+    syncKasMasuk($data, $pengeluaran['created_at']);
+
+    syncSaldo($math_op_query, $pengeluaran['created_at']);
+}
+
+function deletePengeluaran($pengeluaran_id)
+{
+    $pengeluaran = getDetailedPengeluaranById($pengeluaran_id);
+    $dif_value = $pengeluaran['jml_transaksi_keluar'];
+
+    global $pdo;
+
+    //delete pengeluaran
+    $query = "DELETE FROM detail_transaksi_keluar
+       WHERE id_transaksi_keluar = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$pengeluaran['id_transaksi_keluar']]);
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+
+    deleteKasMasuk($pengeluaran['id_kaskeluar']);
+    deleteKas($pengeluaran['id_kas']);
+
+    syncSaldo("(saldo_kas + $dif_value)", $pengeluaran['created_at']);
+}
+
 //
 // function generatePengeluaranId($lastId)
 // {

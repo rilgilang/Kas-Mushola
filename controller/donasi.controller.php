@@ -4,7 +4,7 @@ function getDetailedDonasi()
 {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT k.id_kas, k.saldo_kas, km.tgl_kasmasuk, km.jml_kasmasuk, d.nama_donatur, d.tgl_donasi, d.jml_donasi FROM kas k JOIN kas_masuk km ON k.id_kasmasuk = km.id_kasmasuk");
+    $stmt = $pdo->prepare("SELECT k.id_kas, d.id_donasi, km.id_kasmasuk ,k.saldo_kas, km.tgl_kasmasuk, km.jml_kasmasuk, d.nama_donatur, d.tgl_donasi, d.jml_donasi FROM kas k JOIN kas_masuk km ON k.id_kasmasuk = km.id_kasmasuk JOIN donasi d ON km.id_donasi = d.id_donasi WHERE d.id_donasi = ? LIMIT 1;");
     $stmt->execute();
     $kas = $stmt->fetchAll();
 
@@ -126,4 +126,29 @@ function generateDonasiId($lastId)
         $result = $newNumber;
         return $result;
     }
+}
+
+function deleteDonasi($donasi_id)
+{
+    $donasi = getDetailedDonasi($donasi_id);
+    $dif_value = $donasi['jml_donasi'];
+
+    global $pdo;
+
+    //delete donasi
+    $query = "DELETE FROM donasi
+       WHERE id_donasi = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$donasi['id_donasi']]);
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+
+    deleteKasMasuk($donasi['id_kasmasuk']);
+    deleteKas($donasi['id_kas']);
+
+    syncSaldo("(saldo_kas - $dif_value)", $donasi['created_at']);
 }
