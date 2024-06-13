@@ -125,85 +125,22 @@ function getKasById($kas_id)
 
 function getLatestTypeTrx()
 {
-    $latest = [
-        "type" => '',
-        "value" => 0,
-        "latest_saldo" => 0,
-    ];
-
     global $pdo;
 
     $kas_masuk = getLatestKasMasuk();
     $kas_keluar = getLatestKasKeluar();
-
+    $kas = getLatestKas();
 
     if ($kas_masuk == false && $kas_keluar == false) {
-        return $latest;
+        return false;
     }
 
-    if (!$kas_masuk && $kas_keluar) {
-        $latest['type'] = 'kredit';
-        $latest['value'] = $kas_keluar['jml_kaskeluar'];
-
-        $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kaskeluar = ? LIMIT 1;");
-        $stmt->execute([$kas_keluar["id_kaskeluar"]]);
-        $kas = $stmt->fetch();
-
-        if (empty($kas)) {
-            return false;
-        }
-
-        $latest['latest_saldo'] = (int)$kas['saldo_kas'];
-
-        return $latest;
-    } else {
-        $latest['type'] = 'debit';
-        $latest['value'] = $kas_masuk['jml_kasmasuk'];
-
-        $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kasmasuk = ? LIMIT 1;");
-        $stmt->execute([$kas_masuk["id_kasmasuk"]]);
-        $kas = $stmt->fetch();
-
-        if (empty($kas)) {
-            return false;
-        }
-
-        $latest['latest_saldo'] = (int)$kas['saldo_kas'];
-
-        return $latest;
-    }
-
-
-
-    if ($kas_masuk['created_at'] >  $kas_keluar['created_at']) {
-        $latest['type'] = 'debit';
-        $latest['value'] = $kas_masuk['jml_kasmasuk'];
-    } else {
-        $latest['type'] = 'kredit';
-        $latest['value'] = $kas_keluar['jml_kaskeluar'];
-    }
-
-    if ($latest['type'] = 'debit') {
-        $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kasmasuk = ? LIMIT 1;");
-        $stmt->execute([$kas_masuk["id_kasmasuk"]]);
-        $kas = $stmt->fetch();
-
-        if (empty($kas)) {
-            return false;
-        }
-
-        $latest['latest_saldo'] = (int)$kas['saldo_kas'];
-    } else {
-        $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kaskeluar = ? LIMIT 1;");
-        $stmt->execute([$kas_keluar["id_kaskeluar"]]);
-        $kas = $stmt->fetch();
-
-        if (empty($kas)) {
-            return false;
-        }
-
-        $latest['latest_saldo'] = (int)$kas['saldo_kas'];
-    }
+    $latest = [
+        "type" => $kas_masuk == false ? 'kredit' : 'debit',
+        "latest_saldo" => $kas['saldo_kas'],
+        "latest_total_kasmasuk" => $kas_masuk['jml_kasmasuk'],
+        "latest_total_kaskeluar" => $kas_keluar['jml_kaskeluar'],
+    ];
 
     return $latest;
 }
@@ -372,6 +309,24 @@ function syncKasMasuk($data, $created_at)
 
     //update kas masuk
     $query = "UPDATE kas_masuk
+     SET tgl_kasmasuk = ?, jml_kasmasuk = ?, ket_kasmasuk = ?
+     WHERE created_at >= ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$data['tgl_kasmasuk'], $data['jml_kasmasuk'], $data['keterangan'], $created_at]);
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+function syncKasKeluar($data, $created_at)
+{
+    global $pdo;
+
+    //update kas masuk
+    $query = "UPDATE kas_keluar
      SET tgl_kasmasuk = ?, jml_kasmasuk = ?, ket_kasmasuk = ?
      WHERE created_at >= ?;";
 

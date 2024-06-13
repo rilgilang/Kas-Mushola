@@ -161,6 +161,9 @@ function updateInfaq($infaqId, $data)
         return $e->getMessage();
     }
 
+    $data['tgl_kasmasuk'] = $data['tgl_infaq'];
+    $data['jml_kasmasuk'] = $data['jml_kasmasuk'];
+
     syncKasMasuk($data, $infaq['created_at']);
 
     syncSaldo($math_op_query, $infaq['created_at']);
