@@ -51,7 +51,7 @@ $filter = [
                                                     <input type="date" class="form-control" id="inlineFormInputGroupUsername2" placeholder="DD/MM/YYYY" name="end_date">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-3">
                                                 <button type="submit" class="btn btn-primary font-weight-bold text-white">Cari</button>
                                             </div>
                                         </div>
@@ -59,6 +59,9 @@ $filter = [
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <a href="./tambah_pengeluaran.php" class="btn btn-primary font-weight-bold text-white">Tambah Pengeluaran</a>
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">

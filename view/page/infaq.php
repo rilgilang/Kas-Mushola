@@ -65,6 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
+                        <a href="./tambah_infaq.php" class="btn btn-primary font-weight-bold text-white">Tambah Infaq</a>
+                    </div>
+                    <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Kas</h4>

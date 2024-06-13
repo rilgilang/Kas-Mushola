@@ -61,6 +61,9 @@ $filter = [
                         </div>
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
+                        <a href="./tambah_donasi.php" class="btn btn-primary font-weight-bold text-white">Tambah Donasi</a>
+                    </div>
+                    <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Kas</h4>

@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="jenis_pengeluaran" class="col-sm-3 col-form-label">Jenis Pengeluaran</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="jenis_pengeluaran" name="jenis_pengeluaran" value="<?= $pengeluaran['jenis_transaksi_keluar'] ?>">
+                                            <input type="text" class="form-control" id="jenis_pengeluaran" name="jenis_transaksi_keluar" value="<?= $pengeluaran['jenis_transaksi_keluar'] ?>">
                                         </div>
                                     </div>
 

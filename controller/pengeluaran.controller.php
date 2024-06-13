@@ -149,7 +149,7 @@ function updatePengeluaranById($pengeluaran_id, $data)
     $data['tgl_kaskeluar'] = $data['tgl_transaksi_keluar'];
     $data['jml_kaskeluar'] = $data['jml_transaksi_keluar'];
 
-    syncKasMasuk($data, $pengeluaran['created_at']);
+    syncKasKeluar($data, $pengeluaran['created_at']);
 
     syncSaldo($math_op_query, $pengeluaran['created_at']);
 }

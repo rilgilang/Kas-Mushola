@@ -162,7 +162,7 @@ function updateInfaq($infaqId, $data)
     }
 
     $data['tgl_kasmasuk'] = $data['tgl_infaq'];
-    $data['jml_kasmasuk'] = $data['jml_kasmasuk'];
+    $data['jml_kasmasuk'] = $data['jml_infaq'];
 
     syncKasMasuk($data, $infaq['created_at']);
 

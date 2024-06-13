@@ -22,17 +22,10 @@ checkLogin();
             <div class="main-panel">
                 <div class="content-wrapper">
                     <div class="row">
-                        <div class="col-md-12 grid-margin">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <!-- <h4 class="font-weight-bold mb-0">RoyalUI Dashboard</h4> -->
-                                </div>
-                                <div>
-                                    <a href="/tambah_user.php" type="button" class="btn btn-primary btn-icon-text btn-rounded text-white">
-                                        <i class="ti-clipboard btn-icon-prepend"></i>Tambah
-                                    </a>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <a href="./tambah_user.php" class="btn btn-primary font-weight-bold text-white">Tambah User</a>
                         </div>
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">

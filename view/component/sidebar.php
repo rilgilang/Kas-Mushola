@@ -56,17 +56,19 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link" href="../../view/page/pengeluaran.php">
+                <i class="ti-layout-list-post menu-icon"></i>
+                <span class="menu-title">Pengeluaran</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link" href="../../view/page/kas.php">
                 <i class="ti-layout-list-post menu-icon"></i>
                 <span class="menu-title">Laporan Kas</span>
             </a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link" href="../../view/page/pengeluaran.php">
-                <i class="ti-layout-list-post menu-icon"></i>
-                <span class="menu-title">Pengeluaran</span>
-            </a>
-        </li>
+
     </ul>
 </nav>

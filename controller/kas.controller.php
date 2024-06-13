@@ -137,9 +137,9 @@ function getLatestTypeTrx()
 
     $latest = [
         "type" => $kas_masuk == false ? 'kredit' : 'debit',
-        "latest_saldo" => $kas['saldo_kas'],
-        "latest_total_kasmasuk" => $kas_masuk['jml_kasmasuk'],
-        "latest_total_kaskeluar" => $kas_keluar['jml_kaskeluar'],
+        "latest_saldo" => $kas == false ? 0 : $kas['saldo_kas'],
+        "latest_total_kasmasuk" => $kas_masuk == false ? 0 : $kas_masuk['jml_kasmasuk'],
+        "latest_total_kaskeluar" => $kas_keluar == false ? 0 : $kas_keluar['jml_kaskeluar'],
     ];
 
     return $latest;
@@ -327,12 +327,12 @@ function syncKasKeluar($data, $created_at)
 
     //update kas masuk
     $query = "UPDATE kas_keluar
-     SET tgl_kasmasuk = ?, jml_kasmasuk = ?, ket_kasmasuk = ?
+     SET tgl_kaskeluar = ?, jml_kaskeluar = ?, ket_kaskeluar = ?
      WHERE created_at >= ?;";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['tgl_infaq'], $data['jml_infaq'], $data['keterangan'], $created_at]);
+        $stmt->execute([$data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['keterangan'], $created_at]);
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
