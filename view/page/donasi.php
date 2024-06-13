@@ -76,6 +76,7 @@ $filter = [
                                                 <th>Nama Donatur</th>
                                                 <th>Keterangan</th>
                                                 <th>Jumlah</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -85,6 +86,7 @@ $filter = [
                                             if ($data == false) {
                                             ?>
                                                 <tr>
+                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -102,6 +104,16 @@ $filter = [
                                                         <td><?= $val['nama_donatur'] ?></td>
                                                         <td><?= $val['ket_kasmasuk'] == "No Description" ? null : $val['ket_kasmasuk'] ?></td>
                                                         <td><?= $val['jml_donasi'] ?></td>
+                                                        <td>
+                                                            <a type="button" href="./edit_donasi.php?id=<?= $val['id_donasi'] ?>" class="btn btn-outline-secondary btn-icon-text">
+                                                                Edit
+                                                                <i class="ti-file btn-icon-append"></i>
+                                                            </a>
+                                                            <a type="button" href="./delete_donasi.php?id=<?= $val['id_donasi'] ?>" class="btn btn-outline-danger btn-icon-text">
+                                                                <i class="ti-upload btn-icon-prepend"></i>
+                                                                Hapus
+                                                            </a>
+                                                        </td>
                                                     </tr>
                                             <?php
                                                 }
