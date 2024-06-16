@@ -82,7 +82,9 @@ $filter = [
                                                 <th>Jenis Transaksi</th>
                                                 <th>Keterangan</th>
                                                 <th>Jumlah</th>
-                                                <th>Aksi</th>
+                                                <?php if (isAdminOrTakmir()) : ?>
+                                                    <th>Aksi</th>
+                                                <?php endif; ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -98,7 +100,9 @@ $filter = [
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td></td>
+                                                    <?php if (isAdminOrTakmir()) : ?>
+                                                        <td></td>
+                                                    <?php endif; ?>
                                                 </tr>
                                                 <?php
                                             } else {
@@ -110,16 +114,19 @@ $filter = [
                                                         <td><?= $val['jenis_transaksi_keluar'] ?></td>
                                                         <td><?= $val['ket_kaskeluar'] == "No Description" ? null : $val['ket_kaskeluar'] ?></td>
                                                         <td><?= $val['jml_transaksi_keluar'] ?></td>
-                                                        <td>
-                                                            <a type="button" href="./edit_pengeluaran.php?id=<?= $val['id_transaksi_keluar'] ?>" class="btn btn-outline-secondary btn-icon-text">
-                                                                Edit
-                                                                <i class="ti-file btn-icon-append"></i>
-                                                            </a>
-                                                            <a type="button" href="./delete_pengeluaran.php?id=<?= $val['id_transaksi_keluar'] ?>" class="btn btn-outline-danger btn-icon-text">
-                                                                <i class="ti-upload btn-icon-prepend"></i>
-                                                                Hapus
-                                                            </a>
-                                                        </td>
+                                                        <?php if (isAdminOrTakmir()) : ?>
+                                                            <td>
+                                                                <a type="button" href="./edit_pengeluaran.php?id=<?= $val['id_transaksi_keluar'] ?>" class="btn btn-outline-secondary btn-icon-text">
+                                                                    Edit
+                                                                    <i class="ti-file btn-icon-append"></i>
+                                                                </a>
+                                                                <a type="button" href="./delete_pengeluaran.php?id=<?= $val['id_transaksi_keluar'] ?>" class="btn btn-outline-danger btn-icon-text">
+                                                                    <i class="ti-upload btn-icon-prepend"></i>
+                                                                    Hapus
+                                                                </a>
+                                                            </td>
+                                                        <?php endif; ?>
+
                                                     </tr>
                                             <?php
                                                 }

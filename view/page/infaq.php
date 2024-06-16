@@ -89,7 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 <th>Jenis Infaq</th>
                                                 <th>Keterangan</th>
                                                 <th>Jumlah</th>
-                                                <th>Aksi</th>
+                                                <?php if (isAdminOrTakmir()) : ?>
+                                                    <th>Aksi</th>
+                                                <?php endif; ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -105,7 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td></td>
+                                                    <?php if (isAdminOrTakmir()) : ?>
+                                                        <td></td>
+                                                    <?php endif; ?>
+
                                                 </tr>
                                                 <?php
                                             } else {
@@ -117,16 +122,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         <td><?= $val['jenis_infaq'] ?></td>
                                                         <td><?= $val['ket_kasmasuk'] == "No Description" ? null : $val['ket_kasmasuk'] ?></td>
                                                         <td><?= $val['jml_infaq'] ?></td>
-                                                        <td>
-                                                            <a type="button" href="./edit_infaq.php?id=<?= $val['id_infaq'] ?>" class="btn btn-outline-secondary btn-icon-text">
-                                                                Edit
-                                                                <i class="ti-file btn-icon-append"></i>
-                                                            </a>
-                                                            <a type="button" href="./delete_infaq.php?id=<?= $val['id_infaq'] ?>" class="btn btn-outline-danger btn-icon-text">
-                                                                <i class="ti-upload btn-icon-prepend"></i>
-                                                                Hapus
-                                                            </a>
-                                                        </td>
+
+                                                        <?php if (isAdminOrTakmir()) : ?>
+                                                            <td>
+                                                                <a type="button" href="./edit_infaq.php?id=<?= $val['id_infaq'] ?>" class="btn btn-outline-secondary btn-icon-text">
+                                                                    Edit
+                                                                    <i class="ti-file btn-icon-append"></i>
+                                                                </a>
+                                                                <a type="button" href="./delete_infaq.php?id=<?= $val['id_infaq'] ?>" class="btn btn-outline-danger btn-icon-text">
+                                                                    <i class="ti-upload btn-icon-prepend"></i>
+                                                                    Hapus
+                                                                </a>
+                                                            </td>
+                                                        <?php endif; ?>
+
+
                                                     </tr>
                                             <?php
                                                 }
