@@ -5,6 +5,9 @@ include '../../controller/donasi.controller.php';
 include '../../controller/kas.controller.php';
 
 checkLogin();
+isAdminOrTakmir("donasi.php");
+
+
 $donasi_id = $_GET['id'];
 $donasi = getDetailedDonasiById($donasi_id);
 

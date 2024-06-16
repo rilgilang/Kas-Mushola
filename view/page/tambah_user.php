@@ -4,6 +4,11 @@ include '../../middleware/auth.php';
 include '../../controller/user.controller.php';
 
 checkLogin();
+if (!isAdmin()) {
+    header("Location: user.php");
+    exit();
+}
+
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

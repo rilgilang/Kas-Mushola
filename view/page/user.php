@@ -25,7 +25,9 @@ checkLogin();
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="col-lg-12 grid-margin stretch-card">
-                            <a href="./tambah_user.php" class="btn btn-primary font-weight-bold text-white">Tambah User</a>
+                            <?php if (isAdmin()) : ?>
+                                <a href="./tambah_user.php" class="btn btn-primary font-weight-bold text-white">Tambah User</a>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">

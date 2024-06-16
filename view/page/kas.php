@@ -34,8 +34,8 @@ $filter = [
                                 <div class="card-body">
                                     <h4 class="card-title">Filter</h4>
                                     <form class="form-inline" method="get" action="kas.php">
-                                        <div class="row align-items-center">
-                                            <div class="col-md-3">
+                                        <div class="row align-items-center justify-content-between">
+                                            <div class="col-md-5">
                                                 <div class="input-group mr-sm-2">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text text-black">Dari</div>
@@ -43,7 +43,7 @@ $filter = [
                                                     <input type="date" class="form-control" id="inlineFormInputGroupUsername2" placeholder="DD/MM/YYYY" name="start_date">
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-5">
                                                 <div class="input-group mr-sm-2">
                                                     <div class="input-group-prepend">
                                                         <div class="input-group-text text-black">Sampai</div>
@@ -51,14 +51,19 @@ $filter = [
                                                     <input type="date" class="form-control" id="inlineFormInputGroupUsername2" placeholder="DD/MM/YYYY" name="end_date">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <button type="submit" class="btn btn-primary font-weight-bold text-white">Cari</button>
+                                            <div class="col-md-2">
+                                                <div class="d-flex justify-content-end">
+                                                    <button type="submit" class="btn btn-primary font-weight-bold text-white">Cari</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="d-flex justify-content-between grid-margin">
+                        <a href="./download_pdf.php?type=kas" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
