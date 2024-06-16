@@ -38,11 +38,10 @@ function isKetuaTakmir()
     return true;
 }
 
-function isAdminOrTakmir($goPage)
+function isAdminOrTakmir()
 {
     if ($_SESSION['roles'] == "ketua_takmir") {
-        header("Location: $goPage");
-        exit();
+        return false;
     }
     return true;
 }

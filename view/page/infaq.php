@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                     </div>
                     <div class="d-flex justify-content-between grid-margin">
-                        <?php if (isAdminOrTakmir("infaq.php")) : ?>
+                        <?php if (isAdminOrTakmir()) : ?>
                             <a href="./tambah_infaq.php" class="btn btn-primary font-weight-bold text-white">Tambah Infaq</a>
                         <?php endif; ?>
 

@@ -63,7 +63,7 @@ $filter = [
                         </div>
                     </div>
                     <div class="d-flex justify-content-between grid-margin">
-                        <?php if (isAdminOrTakmir("pengeluaran.php")) : ?>
+                        <?php if (isAdminOrTakmir()) : ?>
                             <a href="./tambah_pengeluaran.php" class="btn btn-primary font-weight-bold text-white">Tambah Pengeluaran</a>
                         <?php endif; ?>
 

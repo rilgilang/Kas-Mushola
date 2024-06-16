@@ -5,7 +5,9 @@ include '../../controller/donasi.controller.php';
 include '../../controller/kas.controller.php';
 
 checkLogin();
-isAdminOrTakmir("donasi.php");
+if (!isAdminOrTakmir()) {
+    header("Location: donasi.php");
+}
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

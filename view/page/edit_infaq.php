@@ -5,7 +5,9 @@ include '../../controller/infaq.controller.php';
 include '../../controller/kas.controller.php';
 
 checkLogin();
-isAdminOrTakmir("donasi.php");
+if (!isAdminOrTakmir()) {
+    header("Location: infaq.php");
+}
 
 $infaq_id = $_GET['id'];
 $infaq = getDetailedInfaqbyId($infaq_id);
