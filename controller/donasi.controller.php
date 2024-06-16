@@ -182,3 +182,30 @@ function updateDonasi($donasi_id, $data)
 
     syncSaldo($math_op_query, $donasi['created_at']);
 }
+
+
+function sumAllDonasi()
+{
+    global $pdo;
+
+    //get all sum of kas masuk
+    $query = "SELECT 
+    COALESCE(SUM(jml_donasi), 0) AS total_donasi
+    FROM 
+    donasi;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $kas = $stmt->fetch();
+
+        if (empty($kas)) {
+            return false;
+        }
+
+        return $kas;
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}

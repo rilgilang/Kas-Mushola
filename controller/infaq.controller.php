@@ -194,3 +194,29 @@ function deleteInfaq($infaqId)
 
     syncSaldo("(saldo_kas - $dif_value)", $infaq['created_at']);
 }
+
+function sumAllInfaq()
+{
+    global $pdo;
+
+    //get all sum of infaq masuk
+    $query = "SELECT 
+    COALESCE(SUM(jml_infaq), 0) AS total_infaq
+    FROM 
+    infaq;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $kas = $stmt->fetch();
+
+        if (empty($kas)) {
+            return false;
+        }
+
+        return $kas;
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}

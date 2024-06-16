@@ -90,8 +90,8 @@
       });
     }
 
-    if ($("#sales-chart").length) {
-      var SalesChartCanvas = $("#sales-chart").get(0).getContext("2d");
+    if ($("#kas_chart").length) {
+      var SalesChartCanvas = $("#kas_chart").get(0).getContext("2d");
       var SalesChart = new Chart(SalesChartCanvas, {
         type: 'bar',
         data: {

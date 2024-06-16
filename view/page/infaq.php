@@ -3,6 +3,7 @@ include '../../bootstrap/db.php';
 include '../../middleware/auth.php';
 include '../../controller/infaq.controller.php';
 include '../../controller/donasi.controller.php';
+include '../../controller/pdf.controller.php';
 
 checkLogin();
 
@@ -66,7 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
                         <a href="./tambah_infaq.php" class="btn btn-primary font-weight-bold text-white">Tambah Infaq</a>
+                        <a href="./download_pdf.php?type=infaq" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+
                     </div>
+
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">

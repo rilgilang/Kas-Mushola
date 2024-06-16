@@ -179,6 +179,33 @@ function deletePengeluaran($pengeluaran_id)
     syncSaldo("(saldo_kas + $dif_value)", $pengeluaran['created_at']);
 }
 
+function sumAllPengeluaran()
+{
+    global $pdo;
+
+    //get all sum of kas keluar
+    $query = "SELECT 
+    COALESCE(SUM(jml_transaksi_keluar), 0) AS total_kaskeluar
+FROM 
+    detail_transaksi_keluar;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $kas = $stmt->fetch();
+
+        if (empty($kas)) {
+            return false;
+        }
+
+        return $kas;
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+
 //
 // function generatePengeluaranId($lastId)
 // {

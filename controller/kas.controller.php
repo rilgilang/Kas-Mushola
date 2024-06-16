@@ -4,25 +4,46 @@ function getDashboardData()
 {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT * FROM kas");
-    $stmt->execute();
-    $kas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $data = [
-        "total_pengeluaran" => 0,
-        "total_pemasukan" => 0,
-        "saldo_akhir" => 0,
+    $result = [
+        'total_infaq' => sumAllInfaq() != false ?  sumAllInfaq()['total_infaq'] : 0,
+        'total_donasi' => sumAllDonasi() != false ?  sumAllDonasi()['total_donasi'] : 0,
+        'total_pengeluaran' => sumAllPengeluaran() != false ? sumAllPengeluaran()['total_kaskeluar'] : 0,
+        'total_saldo' => getLatestSaldo() != false ? getLatestSaldo()['saldo_kas'] : 0,
+        'graph' => null
     ];
 
-    foreach ($kas as $val) {
-        switch ($val['jenis']) {
-            case 'pengeluaran':
-                $data["total_pengeluaran"] += $val["kredit"];
-            case 'pemasukan':
-                $data["total_pemasukan"] += $val["debit"];
-        }
-    };
-    return $data;
+    $query_graph = "WITH RECURSIVE months AS (
+        SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 4 MONTH), '%Y-%m-01') AS month_start
+        UNION ALL
+        SELECT DATE_ADD(month_start, INTERVAL 1 MONTH)
+        FROM months
+        WHERE month_start < CURDATE() - INTERVAL DAY(CURDATE()) - 1 DAY
+    )
+    
+    SELECT
+        DATE_FORMAT(m.month_start, '%Y-%m') AS month_number,
+        MONTHNAME(m.month_start) AS month_name,
+        COALESCE(SUM(km.jml_kasmasuk), 0) AS total_kasmasuk,
+        COALESCE(SUM(kk.jml_kaskeluar), 0) AS total_kaskeluar
+    FROM
+        months m
+    LEFT JOIN
+        kas_masuk km ON DATE_FORMAT(km.tgl_kasmasuk, '%Y-%m') = DATE_FORMAT(m.month_start, '%Y-%m')
+    LEFT JOIN
+        kas_keluar kk ON DATE_FORMAT(kk.tgl_kaskeluar, '%Y-%m') = DATE_FORMAT(m.month_start, '%Y-%m')
+    GROUP BY
+        DATE_FORMAT(m.month_start, '%Y-%m')
+    ORDER BY
+        month_number DESC;";
+
+
+    $stmt = $pdo->prepare($query_graph);
+    $stmt->execute();
+    $graph = $stmt->fetchAll();
+
+    $result['graph'] = $graph;
+
+    return $result;
 }
 
 function getAllKas($filter)
@@ -389,6 +410,25 @@ function deleteKas($kas_id)
         $stmt = $pdo->prepare($query);
         $stmt->execute([$kas_id]);
         return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+
+function getLatestSaldo()
+{
+    global $pdo;
+
+    //update kas
+    $query = "SELECT * FROM kas ORDER BY created_at DESC LIMIT 1";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $kas = $stmt->fetch();
+        return $kas;
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
