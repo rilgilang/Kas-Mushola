@@ -10,11 +10,12 @@ function addPengeluaran($data)
 
     $ids = generateAllIdForKas("pengeluaran");
 
-    $query = "INSERT INTO detail_transaksi_keluar (id_transaksi_keluar ,jenis_transaksi_keluar, tgl_transaksi_keluar, jml_transaksi_keluar) VALUES (?, ?, ?, ?)";
+    $query = "INSERT INTO detail_transaksi_keluar (id_transaksi_keluar ,jenis_transaksi_keluar, tgl_transaksi_keluar, jml_transaksi_keluar, file) VALUES (?, ?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids['transaksi_keluar_id'], $data['jenis_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar']]);
+        $stmt->execute([$ids['transaksi_keluar_id'], $data['jenis_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['file']]);
+        return "success";
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -22,27 +23,27 @@ function addPengeluaran($data)
 
     //insert kas_keluar
 
-    $query = "INSERT INTO kas_keluar (id_kaskeluar, tgl_kaskeluar, jml_kaskeluar, ket_kaskeluar, id_transaksi_keluar) VALUES (?, ?, ?, ?, ?)";
+    // $query = "INSERT INTO kas_keluar (id_kaskeluar, tgl_kaskeluar, jml_kaskeluar, ket_kaskeluar, id_transaksi_keluar) VALUES (?, ?, ?, ?, ?)";
 
-    try {
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids['kas_keluar_id'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['keterangan'], $ids['transaksi_keluar_id']]);
-    } catch (PDOException $e) {
-        //error
-        return $e->getMessage();
-    }
+    // try {
+    //     $stmt = $pdo->prepare($query);
+    //     $stmt->execute([$ids['kas_keluar_id'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['keterangan'], $ids['transaksi_keluar_id']]);
+    // } catch (PDOException $e) {
+    //     //error
+    //     return $e->getMessage();
+    // }
 
-    //insert kas
-    $query = "INSERT INTO kas (id_kas ,id_kaskeluar, saldo_kas) VALUES (?, ?, ?)";
+    // //insert kas
+    // $query = "INSERT INTO kas (id_kas ,id_kaskeluar, saldo_kas) VALUES (?, ?, ?)";
 
-    try {
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids['kas_id'], $ids['kas_keluar_id'], $latestTrx['latest_saldo'] - $data['jml_transaksi_keluar']]);
-        return "success";
-    } catch (PDOException $e) {
-        //error
-        return $e->getMessage();
-    }
+    // try {
+    //     $stmt = $pdo->prepare($query);
+    //     $stmt->execute([$ids['kas_id'], $ids['kas_keluar_id'], $latestTrx['latest_saldo'] - $data['jml_transaksi_keluar']]);
+    //     return "success";
+    // } catch (PDOException $e) {
+    //     //error
+    //     return $e->getMessage();
+    // }
 }
 
 function getAllPengeluaran($filter)
@@ -113,7 +114,7 @@ function getDetailedPengeluaranById($pengeluaran_id)
 {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT k.id_kas, tk.id_transaksi_keluar, kk.id_kaskeluar ,k.saldo_kas, kk.ket_kaskeluar, kk.tgl_kaskeluar, kk.jml_kaskeluar, tk.tgl_transaksi_keluar, tk.jenis_transaksi_keluar, tk.jml_transaksi_keluar, tk.created_at FROM kas k JOIN kas_keluar kk ON k.id_kaskeluar = kk.id_kaskeluar JOIN detail_transaksi_keluar tk ON kk.id_transaksi_keluar = tk.id_transaksi_keluar WHERE tk.id_transaksi_keluar = ? LIMIT 1;");
+    $stmt = $pdo->prepare("SELECT * FROM detail_transaksi_keluar WHERE id_transaksi_keluar = ? LIMIT 1;");
     $stmt->execute([$pengeluaran_id]);
     $kas = $stmt->fetch();
 
@@ -129,29 +130,30 @@ function updatePengeluaranById($pengeluaran_id, $data)
     global $pdo;
 
     $pengeluaran = getDetailedPengeluaranById($pengeluaran_id);
-    $dif_value =  $data['jml_transaksi_keluar'] > $pengeluaran['jml_transaksi_keluar'] ? $data['jml_transaksi_keluar'] -  $pengeluaran['jml_transaksi_keluar'] : $pengeluaran['jml_transaksi_keluar'] - $data['jml_transaksi_keluar'];
-    $math_op_query = $data['jml_transaksi_keluar'] > $pengeluaran['jml_transaksi_keluar'] ? "($dif_value + saldo_kas)" : "(saldo_kas - $dif_value)";
+    // $dif_value =  $data['jml_transaksi_keluar'] > $pengeluaran['jml_transaksi_keluar'] ? $data['jml_transaksi_keluar'] -  $pengeluaran['jml_transaksi_keluar'] : $pengeluaran['jml_transaksi_keluar'] - $data['jml_transaksi_keluar'];
+    // $math_op_query = $data['jml_transaksi_keluar'] > $pengeluaran['jml_transaksi_keluar'] ? "($dif_value + saldo_kas)" : "(saldo_kas - $dif_value)";
 
     //update pengeluaran
     $query = "UPDATE detail_transaksi_keluar
-    SET jenis_transaksi_keluar = ?, jml_transaksi_keluar = ?, tgl_transaksi_keluar = ?
+    SET jenis_transaksi_keluar = ?, jml_transaksi_keluar = ?, tgl_transaksi_keluar = ?, file = ? 
     WHERE id_transaksi_keluar = ?;";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['jenis_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['tgl_transaksi_keluar'], $pengeluaran_id]);
+        $stmt->execute([$data['jenis_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['file'], $pengeluaran_id]);
+        return "success";
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
 
 
-    $data['tgl_kaskeluar'] = $data['tgl_transaksi_keluar'];
-    $data['jml_kaskeluar'] = $data['jml_transaksi_keluar'];
+    // $data['tgl_kaskeluar'] = $data['tgl_transaksi_keluar'];
+    // $data['jml_kaskeluar'] = $data['jml_transaksi_keluar'];
 
-    syncKasKeluar($data, $pengeluaran['created_at']);
+    // syncKasKeluar($data, $pengeluaran['created_at']);
 
-    syncSaldo($math_op_query, $pengeluaran['created_at']);
+    // syncSaldo($math_op_query, $pengeluaran['created_at']);
 }
 
 function deletePengeluaran($pengeluaran_id)
@@ -204,21 +206,3 @@ FROM
         return $e->getMessage();
     }
 }
-
-
-//
-// function generatePengeluaranId($lastId)
-// {
-//     $result = "DK";
-//     $newNumber = intval(substr($lastId, 3)) + 1;
-//     if (strlen($newNumber) <= 3) {
-//         for ($x = 0; $x <= 3 - strlen($newNumber); $x++) {
-//             $result = $result . "0";
-//         }
-//         $result = $result . $newNumber;
-//         return $result;
-//     } else {
-//         $result = $newNumber;
-//         return $result;
-//     }
-// }

@@ -3,6 +3,7 @@ include '../../bootstrap/db.php';
 include '../../middleware/auth.php';
 include '../../controller/pengeluaran.controller.php';
 include '../../controller/kas.controller.php';
+include '../../controller/file.controller.php';
 
 checkLogin();
 
@@ -12,21 +13,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $jenis_transaksi_keluar = $_POST['jenis_transaksi_keluar'];
     $tgl_transaksi_keluar = $_POST['tgl_transaksi_keluar'];
     $jml_transaksi_keluar = $_POST['jml_transaksi_keluar'];
-    $keterangan = $_POST['keterangan'];
+    // $keterangan = $_POST['keterangan'];
 
     $data = [
         "jenis_transaksi_keluar" => $jenis_transaksi_keluar,
         "tgl_transaksi_keluar" => $tgl_transaksi_keluar,
         "jml_transaksi_keluar" => $jml_transaksi_keluar,
-        "keterangan" => $keterangan,
+        // "keterangan" => $keterangan,
+        "file" => "",
     ];
 
-    $result = addPengeluaran($data);
-
-    if ($result == "success") {
-        header("Refresh:0");
+    // Handle file upload
+    $image = ProcessAndSaveImage($_FILES['image']);
+    if (!$image['status']) {
+        $error = $image['error'];
     } else {
-        $error = $result;
+        $data['file'] = $image['path'];
+        $result = addPengeluaran($data);
+
+        if ($result == "success") {
+            header("Refresh:0");
+        } else {
+            $error = $result;
+        }
     }
 }
 
@@ -52,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="card-body">
                                 <h4 class="card-title">Tambah Pengeluaran</h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
-                                <form class="forms-sample" method="post" action="tambah_pengeluaran.php">
+                                <form class="forms-sample" method="post" action="tambah_pengeluaran.php" enctype="multipart/form-data">
 
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Jenis Pengeluaran</label>
@@ -75,10 +84,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </div>
                                     </div>
 
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Keterangan</label>
                                         <div class="col-sm-9">
                                             <textarea class="form-control" id="exampleTextarea1" rows="4" name="keterangan"></textarea>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="form-group row">
+                                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Bukti Pengeluaran</label>
+                                        <div class="col-sm-9">
+                                            <input type="file" class="form-control" id="exampleInputEmail2" name="image">
                                         </div>
                                     </div>
 

@@ -8,32 +8,7 @@
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-        <!-- <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                <i class="ti-palette menu-icon"></i>
-                <span class="menu-title">Kas</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                <i class="ti-palette menu-icon"></i>
-                <span class="menu-title">Laporan Kas</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ui-basic">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
-                </ul>
-            </div>
-        </li> -->
+
         <li class="nav-item">
             <a class="nav-link" href="../../view/page/user.php">
                 <i class="ti-layout-list-post menu-icon"></i>
@@ -59,6 +34,21 @@
             <a class="nav-link" href="../../view/page/pengeluaran.php">
                 <i class="ti-layout-list-post menu-icon"></i>
                 <span class="menu-title">Pengeluaran</span>
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link" href="../../view/page/kas_masuk.php">
+                <i class="ti-layout-list-post menu-icon"></i>
+                <span class="menu-title">Kas Masuk</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" href="../../view/page/kas_keluar.php">
+                <i class="ti-layout-list-post menu-icon"></i>
+                <span class="menu-title">Kas Keluar</span>
             </a>
         </li>
 

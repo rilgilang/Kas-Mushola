@@ -3,6 +3,7 @@ include '../../bootstrap/db.php';
 include '../../middleware/auth.php';
 include '../../controller/donasi.controller.php';
 include '../../controller/kas.controller.php';
+include '../../controller/file.controller.php';
 
 checkLogin();
 if (!isAdminOrTakmir()) {
@@ -15,21 +16,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nama_donatur = $_POST['nama_donatur'];
     $tgl_donasi = $_POST['tgl_donasi'];
     $jml_donasi = $_POST['jml_donasi'];
-    $keterangan = $_POST['keterangan'];
 
     $data = [
         "nama_donatur" => $nama_donatur,
         "tgl_donasi" => $tgl_donasi,
         "jml_donasi" => $jml_donasi,
-        "keterangan" => $keterangan,
+        "file" => "",
     ];
 
-    $result = addDonasi($data);
-
-    if ($result == "success") {
-        // header("Refresh:0");
+    // Handle file upload
+    $image = ProcessAndSaveImage($_FILES['image']);
+    if (!$image['status']) {
+        print_r('ICIKIWIR');
+        print_r($image['error']);
+        $error = $image['error'];
     } else {
-        $error = $result;
+        $data['file'] = $image['path'];
+        $result = addDonasi($data);
+
+        if ($result == "success") {
+            // header("Refresh:0");
+        } else {
+            $error = $result;
+        }
     }
 }
 
@@ -55,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="card-body">
                                 <h4 class="card-title">Tambah Donasi</h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
-                                <form class="forms-sample" method="post" action="tambah_donasi.php">
+                                <form class="forms-sample" method="post" action="tambah_donasi.php" enctype="multipart/form-data">
 
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Nama Donatur</label>
@@ -79,9 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Keterangan</label>
+                                        <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Bukti Donasi</label>
                                         <div class="col-sm-9">
-                                            <textarea class="form-control" id="exampleTextarea1" rows="4" name="keterangan"></textarea>
+                                            <input type="file" class="form-control" id="exampleInputEmail2" name="image">
                                         </div>
                                     </div>
 

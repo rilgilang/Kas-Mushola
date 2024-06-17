@@ -54,43 +54,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="main-panel">
                 <div class="content-wrapper">
                     <div class="col-md-12 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">Edit donasi</h4>
-                                <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
-                                <form class="forms-sample" method="post" action="edit_donasi.php?id=<?= $donasi_id ?>">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Edit donasi</h4>
+                                            <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
+                                            <form class="forms-sample" method="post" action="edit_donasi.php?id=<?= $donasi_id ?>">
 
-                                    <div class="form-group row">
-                                        <label for="nama_donatur" class="col-sm-3 col-form-label">Nama Donatur</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="nama_donatur" name="nama_donatur" value="<?= $donasi['nama_donatur'] ?>">
+                                                <div class="form-group row">
+                                                    <label for="nama_donatur" class="col-sm-3 col-form-label">Nama Donatur</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="nama_donatur" name="nama_donatur" value="<?= $donasi['nama_donatur'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="jml_donasi" class="col-sm-3 col-form-label">Jumlah</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="jml_donasi" placeholder="Jumlah" name="jml_donasi" value="<?= $donasi['jml_donasi'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="tgl_donasi" class="col-sm-3 col-form-label">Tanggal</label>
+                                                    <div class="col-sm-3">
+                                                        <input type="date" class="form-control" id="tgl_donasi" name="tgl_donasi" value="<?= $donasi['tgl_donasi'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary me-2">Submit</button>
+                                                <button type="button" class="btn btn-light" onclick="window.location.href='donasi_list.php'">Cancel</button>
+                                            </form>
                                         </div>
                                     </div>
-
-                                    <div class="form-group row">
-                                        <label for="jml_donasi" class="col-sm-3 col-form-label">Jumlah</label>
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="jml_donasi" placeholder="Jumlah" name="jml_donasi" value="<?= $donasi['jml_donasi'] ?>">
+                                </div>
+                                <div class="col-3">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">Bukti Donasi</h4>
+                                            <img src="<?= $donasi['file'] ?>" width="200" height="200">
                                         </div>
                                     </div>
-
-                                    <div class="form-group row">
-                                        <label for="tgl_donasi" class="col-sm-3 col-form-label">Tanggal</label>
-                                        <div class="col-sm-2">
-                                            <input type="date" class="form-control" id="tgl_donasi" name="tgl_donasi" value="<?= $donasi['tgl_donasi'] ?>">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="keterangan" class="col-sm-3 col-form-label">Keterangan</label>
-                                        <div class="col-sm-9">
-                                            <textarea class="form-control" id="keterangan" rows="4" name="keterangan"><?= $donasi['ket_kasmasuk'] ?></textarea>
-                                        </div>
-                                    </div>
-
-                                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                    <button type="button" class="btn btn-light" onclick="window.location.href='donasi_list.php'">Cancel</button>
-                                </form>
+                                </div>
                             </div>
                         </div>
                     </div>

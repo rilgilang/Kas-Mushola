@@ -12,7 +12,8 @@ CREATE TABLE infaq (
     id_infaq VARCHAR(10) PRIMARY KEY,
     jenis_infaq CHAR(30),
     tgl_infaq DATE,
-    jml_infaq INT(12)
+    jml_infaq INT(12),
+    file VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -22,6 +23,7 @@ CREATE TABLE donasi (
     nama_donatur CHAR(30),
     tgl_donasi DATE,
     jml_donasi INT(12),
+    nama_donatur VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -61,6 +63,7 @@ CREATE TABLE detail_transaksi_keluar (
     jenis_transaksi_keluar CHAR(30),
     tgl_transaksi_keluar DATE,
     jml_transaksi_keluar INT(12),
+    file VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

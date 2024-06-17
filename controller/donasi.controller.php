@@ -4,7 +4,7 @@ function getDetailedDonasiById($donasi_id)
 {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT k.id_kas, d.id_donasi, km.id_kasmasuk ,k.saldo_kas, km.tgl_kasmasuk, km.jml_kasmasuk, km.ket_kasmasuk, d.nama_donatur, d.tgl_donasi, d.jml_donasi, d.created_at FROM kas k JOIN kas_masuk km ON k.id_kasmasuk = km.id_kasmasuk JOIN donasi d ON km.id_donasi = d.id_donasi WHERE d.id_donasi = ? LIMIT 1;");
+    $stmt = $pdo->prepare("SELECT * FROM donasi WHERE id_donasi = ? LIMIT 1;");
     $stmt->execute([$donasi_id]);
     $kas = $stmt->fetch();
 
@@ -18,42 +18,17 @@ function getDetailedDonasiById($donasi_id)
 
 function addDonasi($data)
 {
-    $latestTrx = getLatestTypeTrx();
-
 
     //insert donasi
     global $pdo;
 
     $ids = generateAllIdForKas("donasi");
 
-    $query = "INSERT INTO donasi (id_donasi, nama_donatur, tgl_donasi, jml_donasi) VALUES (?, ?, ?, ?)";
+    $query = "INSERT INTO donasi (id_donasi, nama_donatur, tgl_donasi, jml_donasi, file) VALUES (?, ?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids["donasi_id"], $data['nama_donatur'], $data['tgl_donasi'], $data['jml_donasi']]);
-    } catch (PDOException $e) {
-        //error
-        return $e->getMessage();
-    }
-
-    //insert kas_masuk
-    $query = "INSERT INTO kas_masuk (id_kasmasuk, tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_donasi) VALUES (?, ?, ?, ?, ?)";
-
-    try {
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids['kasmasuk_id'], $data['tgl_donasi'], $data['jml_donasi'], $data['keterangan'], $ids['donasi_id']]);
-    } catch (PDOException $e) {
-        //error
-        return $e->getMessage();
-    }
-
-
-    //insert kas
-    $query = "INSERT INTO kas (id_kas ,id_kasmasuk, saldo_kas) VALUES (?, ?, ?)";
-
-    try {
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids['kas_id'], $ids['kasmasuk_id'], $latestTrx['latest_saldo'] + $data['jml_donasi']]);
+        $stmt->execute([$ids["donasi_id"], $data['nama_donatur'], $data['tgl_donasi'], $data['jml_donasi'], $data['file']]);
         return "success";
     } catch (PDOException $e) {
         //error
@@ -131,8 +106,8 @@ function generateDonasiId($lastId)
 
 function deleteDonasi($donasi_id)
 {
-    $donasi = getDetailedDonasiById($donasi_id);
-    $dif_value = $donasi['jml_donasi'];
+    // $donasi = getDetailedDonasiById($donasi_id);
+    // $dif_value = $donasi['jml_donasi'];
 
     global $pdo;
 
@@ -142,16 +117,17 @@ function deleteDonasi($donasi_id)
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$donasi['id_donasi']]);
+        $stmt->execute([$donasi_id]);
+        header("Location: donasi.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
 
-    deleteKasMasuk($donasi['id_kasmasuk']);
-    deleteKas($donasi['id_kas']);
+    // deleteKasMasuk($donasi['id_kasmasuk']);
+    // deleteKas($donasi['id_kas']);
 
-    syncSaldo("(saldo_kas - $dif_value)", $donasi['created_at']);
+    // syncSaldo("(saldo_kas - $dif_value)", $donasi['created_at']);
 }
 
 function updateDonasi($donasi_id, $data)

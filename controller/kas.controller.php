@@ -310,7 +310,7 @@ function generateAllIdForKas($type)
             break;
 
         default:
-            return false;
+            break;
     }
 
     return [
@@ -348,12 +348,12 @@ function syncKasKeluar($data, $created_at)
 
     //update kas masuk
     $query = "UPDATE kas_keluar
-     SET tgl_kaskeluar = ?, jml_kaskeluar = ?, ket_kaskeluar = ?
+     SET tgl_kaskeluar = ?, jml_kaskeluar = ?, ket_kaskeluar = ?, file = ?
      WHERE created_at >= ?;";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['keterangan'], $created_at]);
+        $stmt->execute([$data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['file'], $created_at]);
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -429,6 +429,64 @@ function getLatestSaldo()
         $stmt->execute();
         $kas = $stmt->fetch();
         return $kas;
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+function addKas($data)
+{
+
+
+    $ids = generateAllIdForKas("");
+
+    $latestTrx = getLatestTypeTrx();
+
+    global $pdo;
+
+    //insert kas
+    $query = "INSERT INTO kas (id_kas ,id_kasmasuk, saldo_kas) VALUES (?, ?, ?)";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$ids['kas_id'], $ids['kasmasuk_id'], $latestTrx['latest_saldo'] + $data['jml_donasi']]);
+        return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+function addKasMasuk($data)
+{
+    $ids = generateAllIdForKas("");
+
+    global $pdo;
+
+    //insert kas_masuk
+    $query = "INSERT INTO kas_masuk (id_kasmasuk, tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_donasi) VALUES (?, ?, ?, ?, ?)";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$ids['kasmasuk_id'], $data['tgl_donasi'], $data['jml_donasi'], $data['keterangan'], $ids['donasi_id']]);
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+function addKasKeluar($data)
+{
+    $ids = generateAllIdForKas("");
+
+    global $pdo;
+
+    $query = "INSERT INTO kas_keluar (id_kaskeluar, tgl_kaskeluar, jml_kaskeluar, ket_kaskeluar, id_transaksi_keluar) VALUES (?, ?, ?, ?, ?)";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$ids['kas_keluar_id'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['keterangan'], $ids['transaksi_keluar_id']]);
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
