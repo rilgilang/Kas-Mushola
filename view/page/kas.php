@@ -83,6 +83,9 @@ $filter = [
                                                 <th>Debit</th>
                                                 <th>Kredit</th>
                                                 <th>Saldo</th>
+                                                <?php if (isAdminOrTakmir()) : ?>
+                                                    <th>Aksi</th>
+                                                <?php endif; ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -98,6 +101,9 @@ $filter = [
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <?php if (isAdminOrTakmir()) : ?>
+                                                        <td></td>
+                                                    <?php endif; ?>
                                                 </tr>
                                                 <?php
                                             } else {
@@ -110,6 +116,18 @@ $filter = [
                                                         <td><?= $val['jml_donasi'] == 0 ? $val['jml_infaq'] : $val['jml_donasi'] ?></td>
                                                         <td><?= $val['jml_transaksi_keluar'] ?></td>
                                                         <td><?= $val['saldo_kas'] ?></td>
+                                                        <?php if (isAdminOrTakmir()) : ?>
+                                                            <td>
+                                                                <a type="button" href="./edit_kas.php?id=<?= $val['id_kas'] ?>" class="btn btn-outline-secondary btn-icon-text">
+                                                                    Edit
+                                                                    <i class="ti-file btn-icon-append"></i>
+                                                                </a>
+                                                                <a type="button" href="./delete_kas.php?id=<?= $val['id_kas'] ?>" class="btn btn-outline-danger btn-icon-text">
+                                                                    <i class="ti-upload btn-icon-prepend"></i>
+                                                                    Hapus
+                                                                </a>
+                                                            </td>
+                                                        <?php endif; ?>
                                                     </tr>
                                             <?php
                                                 }

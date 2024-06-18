@@ -118,8 +118,8 @@ function getKasById($kas_id)
 {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kas = ? DESC LIMIT 1;");
-    $stmt->execute();
+    $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kas = ? LIMIT 1;");
+    $stmt->execute([$kas_id]);
     $kas = $stmt->fetch();
 
     if (empty($kas)) {
@@ -173,6 +173,40 @@ function syncSaldo($math_op_query, $created_at)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$created_at]);
+        return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+function updateKas($id, $data)
+{
+    global $pdo;
+
+    //update kas
+    $query = "UPDATE kas
+       SET tgl_kas = ?, id_kasmasuk = ?, jml_kasmasuk = ?, saldo_kas = ?
+       WHERE id_kas = ?;";
+
+    if ($data['trx_type'] == "kredit") {
+        $query = "UPDATE kas
+        SET tgl_kas = ?, id_kaskeluar = ?, jml_kaskeluar = ?, saldo_kas = ?
+        WHERE id_kas = ?;";
+
+        try {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$data['tgl_kas'], $data['id_kaskeluar'], $data['jml_kaskeluar'], $data['saldo_kas'], $id]);
+            return "success";
+        } catch (PDOException $e) {
+            //error
+            return $e->getMessage();
+        }
+    }
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$data['tgl_kas'], $data['id_kasmasuk'], $data['jml_kasmasuk'], $data['saldo_kas'], $id]);
         return "success";
     } catch (PDOException $e) {
         //error

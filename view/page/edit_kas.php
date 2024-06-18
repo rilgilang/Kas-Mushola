@@ -22,9 +22,11 @@ $sumKasKeluar = sumAllKasKeluar();
 $latestKas = getLatestSaldo();
 
 $error = '';
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+$id_kas = $_GET['id'];
+$kasData = getKasById($id_kas);
 
-    $id_kas = $_POST['id_kas'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // $id_kas = $_POST['id_kas'];
     $tgl_kas = $_POST['tgl_kas'];
     $id_kasmasuk = $_POST['trx_type'] == "debit" ? $_POST['id_kasmasuk'] : "";
     $jml_kasmasuk = $_POST['trx_type'] == "debit" ? $_POST['jml_kasmasuk'] : "";
@@ -34,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $data = [
         "trx_type" => $_POST['trx_type'],
-        "id_kas" => $id_kas,
+        // "id_kas" => $id_kas,
         "tgl_kas" => $tgl_kas,
         "id_kasmasuk" => $id_kasmasuk,
         "jml_kasmasuk" => $jml_kasmasuk,
@@ -43,10 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "saldo_kas" => $saldo,
     ];
 
-    $result = addKas($data);
+    $result = updateKas($id_kas, $data);
 
     if ($result == "success") {
-        header("Refresh:0");
+        header("Location: kas.php"); // Redirect to list page after success
     } else {
         $error = $result;
     }
@@ -61,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="container-scroller">
-        <?php include("../component/navbar.php"); ?>
+        <?php // include("../component/navbar.php"); 
+        ?>
         <div class="container-fluid page-body-wrapper">
             <?php include("../component/sidebar.php"); ?>
 
@@ -70,21 +73,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Tambah Kas</h4>
-                                <h4 class="card-title" id="selectedValue"></h4>
+                                <h4 class="card-title">Edit Kas</h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
-                                <form class="forms-sample" method="post" action="tambah_kas.php">
+                                <form class="forms-sample" method="post" action="edit_kas.php?id=<?= $id_kas ?>">
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">ID Kas</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="id_kas">
+                                            <input type="text" class="form-control" name="id_kas" value="<?= $kasData['id_kas'] ?>" readonly>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Tanggal Kas</label>
                                         <div class="col-sm-2">
-                                            <input type="date" class="form-control" placeholder="DD/MM/YYYY" name="tgl_kas">
+                                            <input type="date" class="form-control" name="tgl_kas" value="<?= $kasData['tgl_kas'] ?>">
                                         </div>
                                     </div>
 
@@ -94,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <select class="form-control" id="id_kasmasuk" name="id_kasmasuk">
                                                 <option value="" selected>-</option>
                                                 <?php foreach ($kasMasukList as $key => $kasmasuk) { ?>
-                                                    <option value="<?= $kasmasuk['id_kasmasuk'] ?>" data-jml="<?= $kasmasuk['jml_kasmasuk'] ?>"><?= $kasmasuk['id_kasmasuk'] ?></option>
+                                                    <option value="<?= $kasmasuk['id_kasmasuk'] ?>" data-jml="<?= $kasmasuk['jml_kasmasuk'] ?>" <?= $kasData['id_kasmasuk'] == $kasmasuk['id_kasmasuk'] ? 'selected' : '' ?>><?= $kasmasuk['id_kasmasuk'] ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -103,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Jumlah Kas Masuk</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Jumlah" id="jml_kasmasuk" name="jml_kasmasuk">
+                                            <input type="text" class="form-control" id="jml_kasmasuk" name="jml_kasmasuk" value="<?= $kasData['jml_kasmasuk'] ?>">
                                         </div>
                                     </div>
 
@@ -113,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <select class="form-control" id="id_kaskeluar" name="id_kaskeluar">
                                                 <option value="" selected>-</option>
                                                 <?php foreach ($kasKeluarList as $key => $kaskeluar) { ?>
-                                                    <option value="<?= $kaskeluar['id_kaskeluar'] ?>" data-jml="<?= $kaskeluar['jml_kaskeluar'] ?>"><?= $kaskeluar['id_kaskeluar'] ?></option>
+                                                    <option value="<?= $kaskeluar['id_kaskeluar'] ?>" data-jml="<?= $kaskeluar['jml_kaskeluar'] ?>" <?= $kasData['id_kaskeluar'] == $kaskeluar['id_kaskeluar'] ? 'selected' : '' ?>><?= $kaskeluar['id_kaskeluar'] ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -122,18 +124,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Jumlah Kas Keluar</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Jumlah Kas Keluar" id="jml_kaskeluar" name="jml_kaskeluar">
+                                            <input type="text" class="form-control" id="jml_kaskeluar" name="jml_kaskeluar" value="<?= $kasData['jml_kaskeluar'] ?>">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Saldo</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Jumlah Saldo" id="saldo_kas" name="saldo_kas" value="">
+                                            <input type="text" class="form-control" id="saldo_kas" name="saldo_kas" value="<?= $kasData['saldo_kas'] ?>">
                                         </div>
                                     </div>
 
-                                    <input type="text" name="trx_type" id="trx_type" value="" hidden>
+                                    <input type="text" name="trx_type" id="trx_type" value="<?= $kasData['id_kaskeluar'] ? 'kredit' : 'debit' ?>" hidden>
 
                                     <button type="submit" class="btn btn-primary me-2">Submit</button>
                                     <button class="btn btn-light">Cancel</button>
@@ -199,6 +201,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         document.getElementById('id_kasmasuk').addEventListener('change', toggleFields);
         document.getElementById('id_kaskeluar').addEventListener('change', toggleFields);
+
+        // Initialize the fields based on existing data
+        window.onload = function() {
+            toggleFields();
+        }
     </script>
 </body>
 
