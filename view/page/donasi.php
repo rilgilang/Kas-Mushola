@@ -78,9 +78,9 @@ $filter = [
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>ID Donasi</th>
                                                 <th>Tanggal</th>
                                                 <th>Nama Donatur</th>
-                                                <th>Keterangan</th>
                                                 <th>Jumlah</th>
                                                 <?php if (isAdminOrTakmir()) : ?>
                                                     <th>Aksi</th>
@@ -111,9 +111,9 @@ $filter = [
                                                 ?>
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
+                                                        <td><?= $val['id_donasi'] ?></td>
                                                         <td><?= $val['tgl_donasi'] ?></td>
                                                         <td><?= $val['nama_donatur'] ?></td>
-                                                        <td><?= $val['ket_kasmasuk'] == "No Description" ? null : $val['ket_kasmasuk'] ?></td>
                                                         <td><?= $val['jml_donasi'] ?></td>
 
                                                         <?php if (isAdminOrTakmir()) : ?>

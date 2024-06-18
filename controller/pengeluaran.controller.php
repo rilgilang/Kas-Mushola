@@ -158,8 +158,8 @@ function updatePengeluaranById($pengeluaran_id, $data)
 
 function deletePengeluaran($pengeluaran_id)
 {
-    $pengeluaran = getDetailedPengeluaranById($pengeluaran_id);
-    $dif_value = $pengeluaran['jml_transaksi_keluar'];
+    // $pengeluaran = getDetailedPengeluaranById($pengeluaran_id);
+    // $dif_value = $pengeluaran['jml_transaksi_keluar'];
 
     global $pdo;
 
@@ -169,16 +169,17 @@ function deletePengeluaran($pengeluaran_id)
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$pengeluaran['id_transaksi_keluar']]);
+        $stmt->execute([$pengeluaran_id]);
+        return "success";
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
 
-    deleteKasMasuk($pengeluaran['id_kaskeluar']);
-    deleteKas($pengeluaran['id_kas']);
+    // deleteKasMasuk($pengeluaran['id_kaskeluar']);
+    // deleteKas($pengeluaran['id_kas']);
 
-    syncSaldo("(saldo_kas + $dif_value)", $pengeluaran['created_at']);
+    // syncSaldo("(saldo_kas + $dif_value)", $pengeluaran['created_at']);
 }
 
 function sumAllPengeluaran()

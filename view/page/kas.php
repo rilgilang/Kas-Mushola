@@ -63,6 +63,10 @@ $filter = [
                         </div>
                     </div>
                     <div class="d-flex justify-content-between grid-margin">
+                        <?php if (isAdminOrTakmir()) : ?>
+                            <a href="./tambah_kas.php" class="btn btn-primary font-weight-bold text-white">Tambah Kas</a>
+                        <?php endif; ?>
+
                         <a href="./download_pdf.php?type=kas" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">

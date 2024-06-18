@@ -13,9 +13,6 @@ $filter = [
     'end_date' => isset($_GET['end_date']) ? $_GET['end_date'] : '',
 ];
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-}
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,9 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>ID Infaq</th>
                                                 <th>Tanggal</th>
                                                 <th>Jenis Infaq</th>
-                                                <th>Keterangan</th>
                                                 <th>Jumlah</th>
                                                 <?php if (isAdminOrTakmir()) : ?>
                                                     <th>Aksi</th>
@@ -107,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
                                                     <?php if (isAdminOrTakmir()) : ?>
                                                         <td></td>
                                                     <?php endif; ?>
@@ -118,9 +116,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 ?>
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
+                                                        <td><?= $val['id_infaq'] ?></td>
                                                         <td><?= $val['tgl_infaq'] ?></td>
                                                         <td><?= $val['jenis_infaq'] ?></td>
-                                                        <td><?= $val['ket_kasmasuk'] == "No Description" ? null : $val['ket_kasmasuk'] ?></td>
                                                         <td><?= $val['jml_infaq'] ?></td>
 
                                                         <?php if (isAdminOrTakmir()) : ?>

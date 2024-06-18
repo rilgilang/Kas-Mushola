@@ -59,25 +59,16 @@ function getAllInfaq($filter)
     }
 
     $query = " SELECT 
-            i.id_infaq,
-            i.jenis_infaq,
-            i.tgl_infaq,
-            i.jml_infaq,
-            COALESCE(km.id_kasmasuk, 0) AS id_kasmasuk,
-            COALESCE(km.tgl_kasmasuk, '0000-00-00') AS tgl_kasmasuk,
-            COALESCE(km.jml_kasmasuk, 0) AS jml_kasmasuk,
-            COALESCE(km.ket_kasmasuk, 'No Description') AS ket_kasmasuk
+           *
         FROM 
             infaq i
-        LEFT JOIN 
-            kas_masuk km ON i.id_infaq = km.id_infaq
         $filter_query ;";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute();
-    $kas = $stmt->fetchAll();
+    $result = $stmt->fetchAll();
 
-    return $kas;
+    return $result;
 }
 
 function getLatestInfaq()

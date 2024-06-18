@@ -22,13 +22,11 @@ function addDonasi($data)
     //insert donasi
     global $pdo;
 
-    $ids = generateAllIdForKas("donasi");
-
     $query = "INSERT INTO donasi (id_donasi, nama_donatur, tgl_donasi, jml_donasi, file) VALUES (?, ?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids["donasi_id"], $data['nama_donatur'], $data['tgl_donasi'], $data['jml_donasi'], $data['file']]);
+        $stmt->execute([$data["id_donasi"], $data['nama_donatur'], $data['tgl_donasi'], $data['jml_donasi'], $data['file']]);
         return "success";
     } catch (PDOException $e) {
         //error
@@ -50,25 +48,16 @@ function getAllDonasi($filter)
     }
 
     $query = " SELECT 
-            d.id_donasi,
-            d.tgl_donasi,
-            d.nama_donatur,
-            d.jml_donasi,
-            COALESCE(km.id_kasmasuk, 0) AS id_kasmasuk,
-            COALESCE(km.tgl_kasmasuk, '0000-00-00') AS tgl_kasmasuk,
-            COALESCE(km.jml_kasmasuk, 0) AS jml_kasmasuk,
-            COALESCE(km.ket_kasmasuk, 'No Description') AS ket_kasmasuk
+            *
         FROM 
             donasi d
-        LEFT JOIN 
-            kas_masuk km ON d.id_donasi = km.id_donasi
         $filter_query ;";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute();
-    $kas = $stmt->fetchAll();
+    $result = $stmt->fetchAll();
 
-    return $kas;
+    return $result;
 }
 
 function getLatestDonasi()
