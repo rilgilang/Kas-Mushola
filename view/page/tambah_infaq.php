@@ -16,14 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $jenis_infaq = $_POST['jenis_infaq'];
     $tgl_infaq = $_POST['tgl_infaq'];
     $jml_infaq = $_POST['jml_infaq'];
-    $keterangan = $_POST['keterangan'];
 
     $data = [
         "id_infaq" => $id_infaq,
         "jenis_infaq" => $jenis_infaq,
         "tgl_infaq" => $tgl_infaq,
         "jml_infaq" => $jml_infaq,
-        "keterangan" => $keterangan,
     ];
 
     $result = addInfaq($data);
@@ -86,14 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <input type="date" class="form-control" id="exampleInputEmail2" placeholder="DD/MM/YYYY" name="tgl_infaq">
                                         </div>
                                     </div>
-
-                                    <div class="form-group row">
-                                        <label for="exampleInputConfirmPassword2" class="col-sm-3 col-form-label">Keterangan</label>
-                                        <div class="col-sm-9">
-                                            <textarea class="form-control" id="exampleTextarea1" rows="4" name="keterangan"></textarea>
-                                        </div>
-                                    </div>
-
                                     <button type="submit" class="btn btn-primary me-2">Submit</button>
                                     <button class="btn btn-light">Cancel</button>
                                 </form>

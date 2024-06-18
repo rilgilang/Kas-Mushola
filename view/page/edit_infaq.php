@@ -18,13 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $jenis_infaq = $_POST['jenis_infaq'];
     $tgl_infaq = $_POST['tgl_infaq'];
     $jml_infaq = $_POST['jml_infaq'];
-    $keterangan = $_POST['keterangan'];
 
     $data = [
         "jenis_infaq" => $jenis_infaq,
         "tgl_infaq" => $tgl_infaq,
         "jml_infaq" => $jml_infaq,
-        "keterangan" => $keterangan,
     ];
 
     $result = updateInfaq($infaq_id, $data);
@@ -84,13 +82,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label for="tgl_infaq" class="col-sm-3 col-form-label">Tanggal</label>
                                         <div class="col-sm-2">
                                             <input type="date" class="form-control" id="tgl_infaq" name="tgl_infaq" value="<?= htmlspecialchars($infaq['tgl_infaq']) ?>">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="keterangan" class="col-sm-3 col-form-label">Keterangan</label>
-                                        <div class="col-sm-9">
-                                            <textarea class="form-control" id="keterangan" rows="4" name="keterangan"><?= htmlspecialchars($infaq['ket_kasmasuk']) ?></textarea>
                                         </div>
                                     </div>
 

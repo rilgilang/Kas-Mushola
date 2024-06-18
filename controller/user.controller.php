@@ -29,3 +29,21 @@ function addUser($data)
         return $e->getMessage();
     }
 }
+
+function deleteUser($id)
+{
+    global $pdo;
+
+    //delete donasi
+    $query = "DELETE FROM user
+       WHERE id_user = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$id]);
+        return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}

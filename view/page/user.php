@@ -42,7 +42,9 @@ checkLogin();
                                                 <th>Nama</th>
                                                 <th>Username</th>
                                                 <th>Level</th>
-                                                <th>Aksi</th>
+                                                <?php if (isAdminOrTakmir()) : ?>
+                                                    <th>Aksi</th>
+                                                <?php endif; ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -55,7 +57,18 @@ checkLogin();
                                                     <td><?= $val['nama'] ?></td>
                                                     <td><?= $val['username'] ?></td>
                                                     <td><?= $val['usertype'] ?></td>
-                                                    <td><label class="badge badge-danger">Pending</label></td>
+                                                    <?php if (isAdminOrTakmir()) : ?>
+                                                        <td>
+                                                            <a type="button" href="./edit_user.php?id=<?= $val['id_user'] ?>" class="btn btn-outline-secondary btn-icon-text">
+                                                                Edit
+                                                                <i class="ti-file btn-icon-append"></i>
+                                                            </a>
+                                                            <a type="button" href="./delete_user.php?id=<?= $val['id_user'] ?>" class="btn btn-outline-danger btn-icon-text">
+                                                                <i class="ti-upload btn-icon-prepend"></i>
+                                                                Hapus
+                                                            </a>
+                                                        </td>
+                                                    <?php endif; ?>
                                                 </tr>
                                             <?php
                                             }
