@@ -158,7 +158,7 @@ function deletePengeluaran($pengeluaran_id)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$pengeluaran_id]);
-        return "success";
+        header("Location: donasi.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();

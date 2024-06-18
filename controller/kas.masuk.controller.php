@@ -77,7 +77,7 @@ function deleteKasMasuk($kasmasuk_id)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$kasmasuk_id]);
-        return "success";
+        header("Location: kas_masuk.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();

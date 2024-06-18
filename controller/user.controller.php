@@ -41,7 +41,7 @@ function deleteUser($id)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$id]);
-        return "success";
+        header("Location: user.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();

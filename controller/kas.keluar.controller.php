@@ -124,3 +124,22 @@ function updateKasKeluar($id, $data)
         return $e->getMessage();
     }
 }
+
+
+function deleteKasKeluar($id)
+{
+    global $pdo;
+
+    //update kas
+    $query = "DELETE FROM kas_keluar
+       WHERE id_kaskeluar = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$id]);
+        header("Location: kas_masuk.php");
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}

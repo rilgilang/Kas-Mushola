@@ -145,6 +145,7 @@ function deleteInfaq($infaqId)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$infaqId]);
+        header("Location: infaq.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
