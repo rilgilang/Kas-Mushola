@@ -29,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Handle file upload
     $image = ProcessAndSaveImage($_FILES['image']);
     if (!$image['status']) {
-        print_r('ICIKIWIR');
         print_r($image['error']);
         $error = $image['error'];
     } else {
