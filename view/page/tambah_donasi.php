@@ -13,11 +13,13 @@ if (!isAdminOrTakmir()) {
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    $id_donasi = $_POST['id_donasi'];
     $nama_donatur = $_POST['nama_donatur'];
     $tgl_donasi = $_POST['tgl_donasi'];
     $jml_donasi = $_POST['jml_donasi'];
 
     $data = [
+        "id_donasi" => $id_donasi,
         "nama_donatur" => $nama_donatur,
         "tgl_donasi" => $tgl_donasi,
         "jml_donasi" => $jml_donasi,
@@ -67,6 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <form class="forms-sample" method="post" action="tambah_donasi.php" enctype="multipart/form-data">
 
                                     <div class="form-group row">
+                                        <label for="nama_donatur" class="col-sm-3 col-form-label">Id Donasi</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="id_donasi" name="id_donasi">
+                                        </div>
+                                    </div>
+
+                                    <div class=" form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Nama Donatur</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" id="exampleInputEmail2" name="nama_donatur">

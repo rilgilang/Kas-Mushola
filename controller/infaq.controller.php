@@ -2,47 +2,19 @@
 
 function addInfaq($data)
 {
-    $latestTrx = getLatestTypeTrx();
-
     //insert infaq
     global $pdo;
-
-    $ids = generateAllIdForKas("infaq");
 
     $query = "INSERT INTO infaq (id_infaq, jenis_infaq, tgl_infaq, jml_infaq) VALUES (?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids['infaq_id'], $data['jenis_infaq'], $data['tgl_infaq'], $data['jml_infaq']]);
+        $stmt->execute([$data['id_infaq'], $data['jenis_infaq'], $data['tgl_infaq'], $data['jml_infaq']]);
         return "success";
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
-
-    // //insert kas_masuk
-
-    // $query = "INSERT INTO kas_masuk (id_kasmasuk, tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_infaq) VALUES (?, ?, ?, ?, ?)";
-
-    // try {
-    //     $stmt = $pdo->prepare($query);
-    //     $stmt->execute([$ids['kasmasuk_id'], $data['tgl_infaq'], $data['jml_infaq'], $data['keterangan'], $ids['infaq_id']]);
-    // } catch (PDOException $e) {
-    //     //error
-    //     return $e->getMessage();
-    // }
-
-    // //insert kas
-    // $query = "INSERT INTO kas (id_kas, id_kasmasuk, saldo_kas) VALUES (?, ?, ?)";
-
-    // try {
-    //     $stmt = $pdo->prepare($query);
-    //     $stmt->execute([$ids['kas_id'], $ids['kasmasuk_id'], $latestTrx['latest_saldo'] + $data['jml_infaq']]);
-    //     return "success";
-    // } catch (PDOException $e) {
-    //     //error
-    //     return $e->getMessage();
-    // }
 }
 
 function getAllInfaq($filter)

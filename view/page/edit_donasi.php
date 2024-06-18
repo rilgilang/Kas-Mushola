@@ -19,13 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nama_donatur = $_POST['nama_donatur'];
     $tgl_donasi = $_POST['tgl_donasi'];
     $jml_donasi = $_POST['jml_donasi'];
-    $keterangan = $_POST['keterangan'];
 
     $data = [
         "nama_donatur" => $nama_donatur,
         "tgl_donasi" => $tgl_donasi,
         "jml_donasi" => $jml_donasi,
-        "keterangan" => $keterangan,
     ];
 
     $result = updatedonasi($donasi_id, $data);
@@ -62,6 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <h4 class="card-title">Edit donasi</h4>
                                             <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
                                             <form class="forms-sample" method="post" action="edit_donasi.php?id=<?= $donasi_id ?>">
+
+                                                <div class="form-group row">
+                                                    <label for="nama_donatur" class="col-sm-3 col-form-label">Id Donasi</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="text" class="form-control" id="id_donasi" name="id_donasi" value="<?= $donasi['id_donasi'] ?>" disabled>
+                                                    </div>
+                                                </div>
 
                                                 <div class="form-group row">
                                                     <label for="nama_donatur" class="col-sm-3 col-form-label">Nama Donatur</label>

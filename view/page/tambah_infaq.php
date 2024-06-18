@@ -12,12 +12,14 @@ if (!isAdminOrTakmir()) {
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    $id_infaq = $_POST['id_infaq'];
     $jenis_infaq = $_POST['jenis_infaq'];
     $tgl_infaq = $_POST['tgl_infaq'];
     $jml_infaq = $_POST['jml_infaq'];
     $keterangan = $_POST['keterangan'];
 
     $data = [
+        "id_infaq" => $id_infaq,
         "jenis_infaq" => $jenis_infaq,
         "tgl_infaq" => $tgl_infaq,
         "jml_infaq" => $jml_infaq,
@@ -56,6 +58,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <h4 class="card-title">Tambah Infaq</h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
                                 <form class="forms-sample" method="post" action="tambah_infaq.php">
+
+                                    <div class="form-group row">
+                                        <label for="nama_donatur" class="col-sm-3 col-form-label">Id Infaq</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="id_infaq" name="id_infaq">
+                                        </div>
+                                    </div>
 
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Jenis Infaq</label>

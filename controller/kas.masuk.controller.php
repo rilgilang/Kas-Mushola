@@ -153,3 +153,53 @@ FROM
 
     return $result;
 }
+
+function updateKasMasuk($id, $data)
+{
+    global $pdo;
+
+    //update donasi
+    $query = "UPDATE kas_masuk
+    SET jenis_kasmasuk = ?, id_donasi = ?, id_infaq = '', tgl_kasmasuk = ?, ket_kasmasuk = ?, jml_kasmasuk = ?
+    WHERE id_kasmasuk = ?;";
+
+    if ($data['jenis_kasmasuk'] == "infaq") {
+        //insert kas_masuk
+        //update donasi
+        $query = "UPDATE kas_masuk
+            SET jenis_kasmasuk = ?, id_infaq = ?, id_donasi = '', tgl_kasmasuk = ?, ket_kasmasuk = ?, jml_kasmasuk = ?
+            WHERE id_kasmasuk = ?;";
+
+        try {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$data['jenis_kasmasuk'], $data['id_infaq'],  $data['tgl_kasmasuk'], $data['ket_kasmasuk'], $data['jml_kasmasuk'], $id]);
+            return "success";
+        } catch (PDOException $e) {
+            //error
+            return $e->getMessage();
+        }
+    }
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$data['jenis_kasmasuk'], $data['id_donasi'],  $data['tgl_kasmasuk'], $data['ket_kasmasuk'], $data['jml_kasmasuk'], $id]);
+        return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}
+
+
+function getKasMasukById($id)
+{
+    global $pdo;
+
+    $query = " SELECT * FROM kas_masuk WHERE id_kasmasuk = ? ;";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->execute([$id]);
+    $result = $stmt->fetch();
+
+    return $result;
+}

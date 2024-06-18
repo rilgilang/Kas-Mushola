@@ -19,6 +19,7 @@ $kasMasukList = getAllKasMasuk($filter);
 $kasKeluarList = getAllKasKeluar($filter);
 $sumKasMasuk = sumAllKasMasuk();
 $sumKasKeluar = sumAllKasKeluar();
+$latestKas = getLatestSaldo();
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -32,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $saldo = $_POST['saldo_kas']; // Assuming you need saldo from the form
 
     $data = [
+        "trx_type" => $_POST['trx_type'],
         "id_kas" => $id_kas,
         "tgl_kas" => $tgl_kas,
         "id_kasmasuk" => $id_kasmasuk,
@@ -59,7 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
     <div class="container-scroller">
-        <?php include("../component/navbar.php"); ?>
+        <?php // include("../component/navbar.php"); 
+        ?>
         <div class="container-fluid page-body-wrapper">
             <?php include("../component/sidebar.php"); ?>
 
@@ -111,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <select class="form-control" id="id_kaskeluar" name="id_kaskeluar">
                                                 <option value="" selected>-</option>
                                                 <?php foreach ($kasKeluarList as $key => $kaskeluar) { ?>
-                                                    <option value="<?= $kaskeluar['id_kaskeluar'] ?>" data-jml="<?= $kaskeluar['jml_kaskeluar'] ?>"><?= $kasmasuk['id_kaskeluar'] ?></option>
+                                                    <option value="<?= $kaskeluar['id_kaskeluar'] ?>" data-jml="<?= $kaskeluar['jml_kaskeluar'] ?>"><?= $kaskeluar['id_kaskeluar'] ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
@@ -127,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Saldo</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" placeholder="Jumlah Saldo" id="saldo_kas" name="saldo_kas" value="<?= $sumKasMasuk['jml_kasmasuk'] - $sumKasKeluar['jml_kaskeluar'] ?>">
+                                            <input type="text" class="form-control" placeholder="Jumlah Saldo" id="saldo_kas" name="saldo_kas" value="">
                                         </div>
                                     </div>
 
@@ -155,10 +158,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
         function toggleFields() {
+            const lastSaldoFromDb = <?php echo json_encode($latestKas); ?>;
             var idKasMasuk = document.getElementById('id_kasmasuk');
             var idKasKeluar = document.getElementById('id_kaskeluar');
             var jmlKasMasuk = document.getElementById('jml_kasmasuk');
             var jmlKasKeluar = document.getElementById('jml_kaskeluar');
+            var saldoKas = document.getElementById('saldo_kas');
+
+            // Set jumlah kasmasuk value based on selected id_kasmasuk
+            var selectedOption = idKasMasuk.options[idKasMasuk.selectedIndex];
+            jmlKasMasuk.value = selectedOption.getAttribute('data-jml') || "";
+
+            var selectedOption = idKasKeluar.options[idKasKeluar.selectedIndex];
+            jmlKasKeluar.value = selectedOption.getAttribute('data-jml') || "";
 
             if (idKasMasuk.value != "") {
                 idKasKeluar.disabled = true;
@@ -166,6 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 idKasKeluar.value = "";
                 jmlKasKeluar.value = "";
                 document.getElementById('trx_type').value = "debit";
+                saldoKas.value = lastSaldoFromDb.saldo_kas ? parseInt(lastSaldoFromDb.saldo_kas) + parseInt(jmlKasMasuk.value) : 0 + parseInt(jmlKasMasuk.value);
             } else {
                 idKasKeluar.disabled = false;
                 jmlKasKeluar.disabled = false;
@@ -177,17 +190,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 idKasMasuk.value = "";
                 jmlKasMasuk.value = "";
                 document.getElementById('trx_type').value = "kredit";
+                saldoKas.value = lastSaldoFromDb.saldo_kas ? parseInt(lastSaldoFromDb.saldo_kas) - parseInt(jmlKasKeluar.value) : 0 - parseInt(jmlKasKeluar.value);
             } else {
                 idKasMasuk.disabled = false;
                 jmlKasMasuk.disabled = false;
             }
 
-            // Set jumlah kasmasuk value based on selected id_kasmasuk
-            var selectedOption = idKasMasuk.options[idKasMasuk.selectedIndex];
-            jmlKasMasuk.value = selectedOption.getAttribute('data-jml') || "";
-
-            var selectedOption = idKasKeluar.options[idKasKeluar.selectedIndex];
-            jmlKasKeluar.value = selectedOption.getAttribute('data-jml') || "";
         }
 
         document.getElementById('id_kasmasuk').addEventListener('change', toggleFields);

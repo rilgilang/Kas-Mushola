@@ -1,10 +1,8 @@
 <?php
 include '../../bootstrap/db.php';
 include '../../middleware/auth.php';
-include '../../controller/infaq.controller.php';
-include '../../controller/donasi.controller.php';
 include '../../controller/pdf.controller.php';
-include '../../controller/kas.masuk.controller.php';
+include '../../controller/kas.keluar.controller.php';
 
 checkLogin();
 
@@ -37,7 +35,7 @@ $filter = [
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">Filter</h4>
-                                    <form class="form-inline" method="get" action="kas_masuk.php">
+                                    <form class="form-inline" method="get" action="kas_keluar.php">
                                         <div class="row align-items-center justify-content-between">
                                             <div class="col-md-5">
                                                 <div class="input-group mr-sm-2">
@@ -68,10 +66,10 @@ $filter = [
                     </div>
                     <div class="d-flex justify-content-between grid-margin">
                         <?php if (isAdminOrTakmir()) : ?>
-                            <a href="./tambah_kas_masuk.php" class="btn btn-primary font-weight-bold text-white">Tambah Kas Masuk</a>
+                            <a href="./tambah_kas_keluar.php" class="btn btn-primary font-weight-bold text-white">Tambah Kas Keluar</a>
                         <?php endif; ?>
 
-                        <a href="./download_pdf.php?type=infaq" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                        <a href="./download_pdf.php?type=kas_keluar" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
                     </div>
 
 
@@ -84,10 +82,9 @@ $filter = [
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>ID Kas Masuk</th>
-                                                <th>Tanggal Kas Masuk</th>
-                                                <th>Id Infaq</th>
-                                                <th>Id Donasi</th>
+                                                <th>ID Kas Keluar</th>
+                                                <th>ID Transaksi Keluar</th>
+                                                <th>Tanggal Kas Keluar</th>
                                                 <th>Keterangan</th>
                                                 <th>Jumlah</th>
                                                 <?php if (isAdminOrTakmir()) : ?>
@@ -97,12 +94,11 @@ $filter = [
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $data = getAllKasMasuk($filter);
+                                            $data = getAllKasKeluar($filter);
 
                                             if ($data == false) {
                                             ?>
                                                 <tr>
-                                                    <td></td>
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
@@ -120,20 +116,19 @@ $filter = [
                                                 ?>
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
-                                                        <td><?= $val['id_kasmasuk'] ?></td>
-                                                        <td><?= $val['tgl_kasmasuk'] ?></td>
-                                                        <td><?= $val['id_infaq'] ?></td>
-                                                        <td><?= $val['id_donasi'] ?></td>
-                                                        <td><?= $val['ket_kasmasuk'] ?></td>
-                                                        <td><?= $val['jml_kasmasuk'] ?></td>
+                                                        <td><?= $val['id_kaskeluar'] ?></td>
+                                                        <td><?= $val['id_transaksi_keluar'] ?></td>
+                                                        <td><?= $val['tgl_kaskeluar'] ?></td>
+                                                        <td><?= $val['ket_kaskeluar'] ?></td>
+                                                        <td><?= $val['jml_kaskeluar'] ?></td>
 
                                                         <?php if (isAdminOrTakmir()) : ?>
                                                             <td>
-                                                                <a type="button" href="./edit_kas_masuk.php?id=<?= $val['id_kasmasuk'] ?>" class="btn btn-outline-secondary btn-icon-text">
+                                                                <a type="button" href="./edit_kas_keluar.php?id=<?= $val['id_kaskeluar'] ?>" class="btn btn-outline-secondary btn-icon-text">
                                                                     Edit
                                                                     <i class="ti-file btn-icon-append"></i>
                                                                 </a>
-                                                                <a type="button" href="./delete_kas_masuk.php?id=<?= $val['id_kasmasuk'] ?>" class="btn btn-outline-danger btn-icon-text">
+                                                                <a type="button" href="./delete_kaskeluar.php?id=<?= $val['id_kaskeluar'] ?>" class="btn btn-outline-danger btn-icon-text">
                                                                     <i class="ti-upload btn-icon-prepend"></i>
                                                                     Hapus
                                                                 </a>

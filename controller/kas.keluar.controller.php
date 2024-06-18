@@ -38,25 +38,11 @@ function addKasKeluar($data)
 
     global $pdo;
 
-    $query = "INSERT INTO kas_masuk (id_kasmasuk, tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_donasi) VALUES (?, ?, ?, ?, ?)";
-
-    if ($data['jenis_kasmasuk'] == "infaq") {
-        //insert kas_masuk
-        $query = "INSERT INTO kas_masuk (id_kasmasuk, tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_infaq) VALUES (?, ?, ?, ?, ?)";
-
-        try {
-            $stmt = $pdo->prepare($query);
-            $stmt->execute([$data['id_kasmasuk'], $data['tgl_kasmasuk'], $data['jml_kasmasuk'], $data['ket_kasmasuk'], $data['id_infaq']]);
-            return "success";
-        } catch (PDOException $e) {
-            //error
-            return $e->getMessage();
-        }
-    }
+    $query = "INSERT INTO kas_keluar (id_kaskeluar, tgl_kaskeluar, jenis_kaskeluar, ket_kaskeluar, jml_kaskeluar, id_transaksi_keluar) VALUES (?, ?, ?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['id_kasmasuk'], $data['tgl_kasmasuk'], $data['jml_kasmasuk'], $data['ket_kasmasuk'], $data['id_donasi']]);
+        $stmt->execute([$data['id_kaskeluar'], $data['tgl_kaskeluar'], $data['jenis_kaskeluar'], $data['ket_kaskeluar'], $data['jml_kaskeluar'], $data['id_transaksi_keluar']]);
         return "success";
     } catch (PDOException $e) {
         //error
@@ -88,6 +74,20 @@ function getAllKasKeluar($filter)
 }
 
 
+function getKasKeluarById($id)
+{
+    global $pdo;
+
+    $query = " SELECT * FROM kas_keluar WHERE id_kaskeluar = $id ;";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetch();
+
+    return $result;
+}
+
+
 function sumAllKasKeluar()
 {
     global $pdo;
@@ -102,4 +102,25 @@ FROM
     $result = $stmt->fetch();
 
     return $result;
+}
+
+
+
+function updateKasKeluar($id, $data)
+{
+    global $pdo;
+
+    //update donasi
+    $query = "UPDATE kas_keluar
+    SET jenis_kaskeluar = ?, id_transaksi_keluar = ?, tgl_kaskeluar = ?, ket_kaskeluar = ?, jml_kaskeluar = ?
+    WHERE id_kaskeluar = ?;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$data['jenis_kaskeluar'], $data['id_transaksi_keluar'],  $data['tgl_kaskeluar'], $data['ket_kaskeluar'], $data['jml_kaskeluar'], $id]);
+        return "success";
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
 }

@@ -60,6 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <form class="forms-sample" method="post" action="edit_infaq.php?id=<?= $infaq_id ?>">
 
                                     <div class="form-group row">
+                                        <label for="nama_donatur" class="col-sm-3 col-form-label">Id Infaq</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="id_infaq" name="id_infaq" value="<?= $donasi['id_infaq'] ?>" disabled>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label for="jenis_infaq" class="col-sm-3 col-form-label">Jenis Infaq</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" id="jenis_infaq" name="jenis_infaq" value="<?= htmlspecialchars($infaq['jenis_infaq']) ?>">

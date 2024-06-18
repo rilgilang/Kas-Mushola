@@ -123,10 +123,6 @@ function updateDonasi($donasi_id, $data)
 {
     global $pdo;
 
-    $donasi = getDetailedDonasiById($donasi_id);
-    $dif_value =  $data['jml_donasi'] > $donasi['jml_donasi'] ? $data['jml_donasi'] -  $donasi['jml_donasi'] : $donasi['jml_donasi'] - $data['jml_donasi'];
-    $math_op_query = $data['jml_donasi'] > $donasi['jml_donasi'] ? "($dif_value + saldo_kas)" : "(saldo_kas - $dif_value)";
-
     //update donasi
     $query = "UPDATE donasi
     SET nama_donatur = ?, jml_donasi = ?, tgl_donasi = ?
@@ -135,17 +131,11 @@ function updateDonasi($donasi_id, $data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['nama_donatur'], $data['jml_donasi'], $data['tgl_donasi'], $donasi_id]);
+        return "success";
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
-
-    $data['tgl_kasmasuk'] = $data['tgl_donasi'];
-    $data['jml_kasmasuk'] = $data['jml_donasi'];
-
-    syncKasMasuk($data, $donasi['created_at']);
-
-    syncSaldo($math_op_query, $donasi['created_at']);
 }
 
 

@@ -3,18 +3,15 @@
 
 function addPengeluaran($data)
 {
-    $latestTrx = getLatestTypeTrx();
-
     //insert transaksi_keluar
     global $pdo;
 
-    $ids = generateAllIdForKas("pengeluaran");
 
     $query = "INSERT INTO detail_transaksi_keluar (id_transaksi_keluar ,jenis_transaksi_keluar, tgl_transaksi_keluar, jml_transaksi_keluar, file) VALUES (?, ?, ?, ?, ?)";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$ids['transaksi_keluar_id'], $data['jenis_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['file']]);
+        $stmt->execute([$data['id_transaksi_keluar'], $data['jenis_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['file']]);
         return "success";
     } catch (PDOException $e) {
         //error
@@ -60,15 +57,9 @@ function getAllPengeluaran($filter)
     }
 
     $query = " SELECT 
-            dtk.id_transaksi_keluar,
-            dtk.tgl_transaksi_keluar,
-            dtk.jenis_transaksi_keluar,
-            dtk.jml_transaksi_keluar,
-            COALESCE(kk.ket_kaskeluar, 'No Description') AS ket_kaskeluar
+            *
         FROM 
-            detail_transaksi_keluar dtk
-        LEFT JOIN 
-            kas_keluar kk ON dtk.id_transaksi_keluar = kk.id_transaksi_keluar
+            detail_transaksi_keluar
         $filter_query ;";
 
     $stmt = $pdo->prepare($query);
@@ -158,8 +149,8 @@ function updatePengeluaranById($pengeluaran_id, $data)
 
 function deletePengeluaran($pengeluaran_id)
 {
-    // $pengeluaran = getDetailedPengeluaranById($pengeluaran_id);
-    // $dif_value = $pengeluaran['jml_transaksi_keluar'];
+    $pengeluaran = getDetailedPengeluaranById($pengeluaran_id);
+    $dif_value = $pengeluaran['jml_transaksi_keluar'];
 
     global $pdo;
 
@@ -175,11 +166,6 @@ function deletePengeluaran($pengeluaran_id)
         //error
         return $e->getMessage();
     }
-
-    // deleteKasMasuk($pengeluaran['id_kaskeluar']);
-    // deleteKas($pengeluaran['id_kas']);
-
-    // syncSaldo("(saldo_kas + $dif_value)", $pengeluaran['created_at']);
 }
 
 function sumAllPengeluaran()
