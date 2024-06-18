@@ -144,7 +144,7 @@ function deleteInfaq($infaqId)
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$infaq['id_infaq']]);
+        $stmt->execute([$infaqId]);
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
