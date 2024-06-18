@@ -81,7 +81,7 @@ function getKasKeluarById($id)
     $query = " SELECT * FROM kas_keluar WHERE id_kaskeluar = $id ;";
 
     $stmt = $pdo->prepare($query);
-    $stmt->execute();
+    $stmt->execute([$id]);
     $result = $stmt->fetch();
 
     return $result;
