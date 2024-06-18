@@ -136,9 +136,6 @@ function updateInfaq($infaqId, $data)
 
 function deleteInfaq($infaqId)
 {
-    $infaq = getDetailedInfaqbyId($infaqId);
-    $dif_value = $infaq['jml_infaq'];
-
     global $pdo;
 
     //delete infaq
@@ -152,11 +149,6 @@ function deleteInfaq($infaqId)
         //error
         return $e->getMessage();
     }
-
-    deleteKasMasuk($infaq['id_kasmasuk']);
-    deleteKas($infaq['id_kas']);
-
-    syncSaldo("(saldo_kas - $dif_value)", $infaq['created_at']);
 }
 
 function sumAllInfaq()

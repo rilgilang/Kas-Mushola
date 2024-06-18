@@ -95,9 +95,6 @@ function generateDonasiId($lastId)
 
 function deleteDonasi($donasi_id)
 {
-    // $donasi = getDetailedDonasiById($donasi_id);
-    // $dif_value = $donasi['jml_donasi'];
-
     global $pdo;
 
     //delete donasi
@@ -112,11 +109,6 @@ function deleteDonasi($donasi_id)
         //error
         return $e->getMessage();
     }
-
-    // deleteKasMasuk($donasi['id_kasmasuk']);
-    // deleteKas($donasi['id_kas']);
-
-    // syncSaldo("(saldo_kas - $dif_value)", $donasi['created_at']);
 }
 
 function updateDonasi($donasi_id, $data)

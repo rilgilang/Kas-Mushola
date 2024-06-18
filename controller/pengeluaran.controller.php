@@ -149,9 +149,6 @@ function updatePengeluaranById($pengeluaran_id, $data)
 
 function deletePengeluaran($pengeluaran_id)
 {
-    $pengeluaran = getDetailedPengeluaranById($pengeluaran_id);
-    $dif_value = $pengeluaran['jml_transaksi_keluar'];
-
     global $pdo;
 
     //delete pengeluaran
