@@ -27,7 +27,7 @@ function addDonasi($data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data["id_donasi"], $data['nama_donatur'], $data['tgl_donasi'], $data['jml_donasi'], $data['file']]);
-        return "success";
+        header("Location: donasi.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -123,7 +123,7 @@ function updateDonasi($donasi_id, $data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['nama_donatur'], $data['jml_donasi'], $data['tgl_donasi'], $donasi_id]);
-        return "success";
+        header("Location: donasi.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();

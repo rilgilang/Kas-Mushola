@@ -13,12 +13,14 @@ if (!isAdmin()) {
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    $id_user = $_POST['id_user'];
     $nama = $_POST['nama'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     $usertype = $_POST['usertype'];
 
     $data = [
+        "id_user" => $id_user,
         "nama" => $nama,
         "username" => $username,
         "password" => $password,
@@ -27,9 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $result = addUser($data);
 
-    if ($result == "success") {
-        header("Refresh:0; url: user.php"); //TODO add alert
-    } else {
+    if ($result != "success") {
         $error = $result;
     }
 }
@@ -57,6 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <h4 class="card-title">Tambah User</h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
                                 <form class="forms-sample" method="post" action="tambah_user.php">
+
+                                    <div class="form-group row">
+                                        <label for="exampleInputUsername2" class="col-sm-3 col-form-label">ID User</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="exampleInputUsername2" placeholder="ID User" name="id_user">
+                                        </div>
+                                    </div>
 
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Nama</label>
@@ -93,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
 
                                     <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                    <button class="btn btn-light">Cancel</button>
+                                    <a href="./user.php" class="btn btn-light">Cancel</a>
                                 </form>
                             </div>
                         </div>

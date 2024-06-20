@@ -43,7 +43,7 @@ function addKasKeluar($data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['id_kaskeluar'], $data['tgl_kaskeluar'], $data['jenis_kaskeluar'], $data['ket_kaskeluar'], $data['jml_kaskeluar'], $data['id_transaksi_keluar']]);
-        return "success";
+        header("Location: kas_keluar.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -78,7 +78,7 @@ function getKasKeluarById($id)
 {
     global $pdo;
 
-    $query = " SELECT * FROM kas_keluar WHERE id_kaskeluar = $id ;";
+    $query = " SELECT * FROM kas_keluar WHERE id_kaskeluar = ? ;";
 
     $stmt = $pdo->prepare($query);
     $stmt->execute([$id]);
@@ -118,7 +118,7 @@ function updateKasKeluar($id, $data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['jenis_kaskeluar'], $data['id_transaksi_keluar'],  $data['tgl_kaskeluar'], $data['ket_kaskeluar'], $data['jml_kaskeluar'], $id]);
-        return "success";
+        header("Location: kas_keluar.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -137,7 +137,7 @@ function deleteKasKeluar($id)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$id]);
-        header("Location: kas_masuk.php");
+        header("Location: kas_keluar.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();

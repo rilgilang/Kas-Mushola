@@ -128,7 +128,7 @@ $filter = [
                                                                     Edit
                                                                     <i class="ti-file btn-icon-append"></i>
                                                                 </a>
-                                                                <a type="button" href="./delete_kaskeluar.php?id=<?= $val['id_kaskeluar'] ?>" class="btn btn-outline-danger btn-icon-text">
+                                                                <a type="button" href="./delete_kas_keluar.php?id=<?= $val['id_kaskeluar'] ?>" class="btn btn-outline-danger btn-icon-text">
                                                                     <i class="ti-upload btn-icon-prepend"></i>
                                                                     Hapus
                                                                 </a>

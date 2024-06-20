@@ -98,7 +98,7 @@ function addKasMasuk($data)
         try {
             $stmt = $pdo->prepare($query);
             $stmt->execute([$data['id_kasmasuk'], $data['tgl_kasmasuk'], $data['jml_kasmasuk'], $data['ket_kasmasuk'], $data['id_infaq']]);
-            return "success";
+            header("Location: kas_masuk.php");
         } catch (PDOException $e) {
             //error
             return $e->getMessage();
@@ -108,7 +108,7 @@ function addKasMasuk($data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['id_kasmasuk'], $data['tgl_kasmasuk'], $data['jml_kasmasuk'], $data['ket_kasmasuk'], $data['id_donasi']]);
-        return "success";
+        header("Location: kas_masuk.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -173,7 +173,7 @@ function updateKasMasuk($id, $data)
         try {
             $stmt = $pdo->prepare($query);
             $stmt->execute([$data['jenis_kasmasuk'], $data['id_infaq'],  $data['tgl_kasmasuk'], $data['ket_kasmasuk'], $data['jml_kasmasuk'], $id]);
-            return "success";
+            header("Location: kas_masuk.php");
         } catch (PDOException $e) {
             //error
             return $e->getMessage();
@@ -183,7 +183,7 @@ function updateKasMasuk($id, $data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['jenis_kasmasuk'], $data['id_donasi'],  $data['tgl_kasmasuk'], $data['ket_kasmasuk'], $data['jml_kasmasuk'], $id]);
-        return "success";
+        header("Location: kas_masuk.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();

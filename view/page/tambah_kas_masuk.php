@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
 
                                     <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                    <button class="btn btn-light">Cancel</button>
+                                    <a href="./kas_masuk.php" class="btn btn-light">Cancel</a>
                                 </form>
                             </div>
                         </div>

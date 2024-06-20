@@ -45,9 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $result = addKas($data);
 
-    if ($result == "success") {
-        header("Refresh:0");
-    } else {
+    if ($result != "success") {
         $error = $result;
     }
 }
@@ -136,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <input type="text" name="trx_type" id="trx_type" value="" hidden>
 
                                     <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                    <button class="btn btn-light">Cancel</button>
+                                    <a href="./kas.php" class="btn btn-light">Cancel</a>
                                 </form>
                             </div>
                         </div>

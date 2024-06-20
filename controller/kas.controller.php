@@ -197,7 +197,7 @@ function updateKas($id, $data)
         try {
             $stmt = $pdo->prepare($query);
             $stmt->execute([$data['tgl_kas'], $data['id_kaskeluar'], $data['jml_kaskeluar'], $data['saldo_kas'], $id]);
-            return "success";
+            header("Location: kas.php");
         } catch (PDOException $e) {
             //error
             return $e->getMessage();
@@ -207,7 +207,7 @@ function updateKas($id, $data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['tgl_kas'], $data['id_kasmasuk'], $data['jml_kasmasuk'], $data['saldo_kas'], $id]);
-        return "success";
+        header("Location: kas.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -225,7 +225,7 @@ function deleteKas($kas_id)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$kas_id]);
-        return "success";
+        header("Location: kas.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -265,7 +265,7 @@ function addKas($data)
         try {
             $stmt = $pdo->prepare($query);
             $stmt->execute([$data['id_kas'], $data['id_kaskeluar'], $data['jml_kaskeluar'], $data['saldo_kas']]);
-            return "success";
+            header("Location: kas.php");
         } catch (PDOException $e) {
             // Handle error
             return $e->getMessage();
@@ -276,7 +276,7 @@ function addKas($data)
         try {
             $stmt = $pdo->prepare($query);
             $stmt->execute([$data['id_kas'], $data['id_kasmasuk'], $data['jml_kasmasuk'], $data['saldo_kas']]);
-            return "success";
+            header("Location: kas.php");
         } catch (PDOException $e) {
             // Handle error
             return $e->getMessage();

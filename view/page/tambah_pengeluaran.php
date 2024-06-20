@@ -33,9 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $data['file'] = $image['path'];
         $result = addPengeluaran($data);
 
-        if ($result == "success") {
-            header("Refresh:0");
-        } else {
+        if ($result != "success") {
             $error = $result;
         }
     }
@@ -108,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
 
                                     <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                    <button class="btn btn-light">Cancel</button>
+                                    <a href="./pengeluaran.php" class="btn btn-light">Cancel</a>
                                 </form>
                             </div>
                         </div>

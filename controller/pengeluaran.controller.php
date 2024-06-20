@@ -12,35 +12,11 @@ function addPengeluaran($data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['id_transaksi_keluar'], $data['jenis_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['file']]);
-        return "success";
+        header("Location: pengeluaran.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
-
-    //insert kas_keluar
-
-    // $query = "INSERT INTO kas_keluar (id_kaskeluar, tgl_kaskeluar, jml_kaskeluar, ket_kaskeluar, id_transaksi_keluar) VALUES (?, ?, ?, ?, ?)";
-
-    // try {
-    //     $stmt = $pdo->prepare($query);
-    //     $stmt->execute([$ids['kas_keluar_id'], $data['tgl_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['keterangan'], $ids['transaksi_keluar_id']]);
-    // } catch (PDOException $e) {
-    //     //error
-    //     return $e->getMessage();
-    // }
-
-    // //insert kas
-    // $query = "INSERT INTO kas (id_kas ,id_kaskeluar, saldo_kas) VALUES (?, ?, ?)";
-
-    // try {
-    //     $stmt = $pdo->prepare($query);
-    //     $stmt->execute([$ids['kas_id'], $ids['kas_keluar_id'], $latestTrx['latest_saldo'] - $data['jml_transaksi_keluar']]);
-    //     return "success";
-    // } catch (PDOException $e) {
-    //     //error
-    //     return $e->getMessage();
-    // }
 }
 
 function getAllPengeluaran($filter)
@@ -158,7 +134,7 @@ function deletePengeluaran($pengeluaran_id)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$pengeluaran_id]);
-        header("Location: donasi.php");
+        header("Location: pengeluaran.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();

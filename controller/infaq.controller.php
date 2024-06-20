@@ -10,7 +10,7 @@ function addInfaq($data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['id_infaq'], $data['jenis_infaq'], $data['tgl_infaq'], $data['jml_infaq']]);
-        return "success";
+        header("Location: infaq.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -62,7 +62,7 @@ function getDetailedInfaqbyId($infaqId)
 {
     global $pdo;
 
-    $stmt = $pdo->prepare("SELECT k.id_kas, i.id_infaq, km.id_kasmasuk, k.saldo_kas, km.tgl_kasmasuk, km.jml_kasmasuk, km.ket_kasmasuk, i.jenis_infaq, i.tgl_infaq, i.jml_infaq, i.created_at FROM kas k JOIN kas_masuk km ON k.id_kasmasuk = km.id_kasmasuk JOIN  infaq i ON km.id_infaq = i.id_infaq WHERE i.id_infaq = ? LIMIT 1;");
+    $stmt = $pdo->prepare("SELECT * FROM infaq WHERE id_infaq = ? LIMIT 1;");
     $stmt->execute([$infaqId]);
     $kas = $stmt->fetch();
 
