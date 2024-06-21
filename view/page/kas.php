@@ -11,6 +11,7 @@ $filter = [
     'end_date' => isset($_GET['end_date']) ? $_GET['end_date'] : '',
 ];
 
+$total = sumAllKas();
 ?>
 <!DOCTYPE html>
 <html>
@@ -135,6 +136,15 @@ $filter = [
                                             }
 
                                             ?>
+                                            <tr class="border border-white">
+                                                <td></td>
+                                                <td></td>
+                                                <td>Total</td>
+                                                <td>Rp. <?= number_format($total['total_kasmasuk'], 0, ',', '.'); ?></td>
+                                                <td>Rp. <?= number_format($total['total_kaskeluar'], 0, ',', '.'); ?></td>
+                                                <td>Rp. <?= number_format($total['total_saldo'], 0, ',', '.'); ?></td>
+                                                <td></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

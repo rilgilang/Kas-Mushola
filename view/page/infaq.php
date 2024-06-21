@@ -76,7 +76,7 @@ $filter = [
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Kas</h4>
+                                <h4 class="card-title">Infaq</h4>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -120,7 +120,6 @@ $filter = [
                                                         <td><?= $val['tgl_infaq'] ?></td>
                                                         <td><?= $val['jenis_infaq'] ?></td>
                                                         <td>Rp. <?= number_format($val['jml_infaq'], 0, ',', '.'); ?></td>
-
                                                         <?php if (isAdminOrTakmir()) : ?>
                                                             <td>
                                                                 <a type="button" href="./edit_infaq.php?id=<?= $val['id_infaq'] ?>" class="btn btn-outline-secondary btn-icon-text">
@@ -133,14 +132,19 @@ $filter = [
                                                                 </a>
                                                             </td>
                                                         <?php endif; ?>
-
-
                                                     </tr>
                                             <?php
                                                 }
                                             }
-
                                             ?>
+                                            <tr class="border border-white">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Total</td>
+                                                <td>Rp. <?= number_format(sumAllInfaq()['total_infaq'], 0, ',', '.'); ?></td>
+                                                <td></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

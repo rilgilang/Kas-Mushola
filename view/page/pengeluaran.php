@@ -133,6 +133,14 @@ $filter = [
                                             }
 
                                             ?>
+                                            <tr class="border border-white">
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>Total</td>
+                                                <td>Rp. <?= number_format(sumAllPengeluaran()['total_kaskeluar'], 0, ',', '.'); ?></td>
+                                                <td></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>

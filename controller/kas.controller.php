@@ -256,3 +256,31 @@ function getLatestTrxBeforeDate($date)
 
     return $result;
 }
+
+function sumAllKas()
+{
+    global $pdo;
+
+    //get all sum of kas keluar
+    $query = "SELECT 
+    COALESCE(SUM(jml_kasmasuk), 0) AS total_kasmasuk,
+    COALESCE(SUM(jml_kaskeluar), 0) AS total_kaskeluar,
+    COALESCE(SUM(saldo_kas), 0) AS total_saldo
+FROM 
+    kas;";
+
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $kas = $stmt->fetch();
+
+        if (empty($kas)) {
+            return false;
+        }
+
+        return $kas;
+    } catch (PDOException $e) {
+        //error
+        return $e->getMessage();
+    }
+}

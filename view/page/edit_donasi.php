@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 </div>
 
                                                 <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                                <button type="button" class="btn btn-light" onclick="window.location.href='donasi_list.php'">Cancel</button>
+                                                <button type="button" class="btn btn-light" onclick="window.location.href='donasi.php'">Cancel</button>
                                             </form>
                                         </div>
                                     </div>
