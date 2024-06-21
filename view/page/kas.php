@@ -11,7 +11,11 @@ $filter = [
     'end_date' => isset($_GET['end_date']) ? $_GET['end_date'] : '',
 ];
 
-$total = sumAllKas();
+$sum_current = [
+    "total_kasmasuk" => 0,
+    "total_kaskeluar" => 0,
+    "total_saldo" => 0,
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -68,7 +72,12 @@ $total = sumAllKas();
                             <a href="./tambah_kas.php" class="btn btn-primary font-weight-bold text-white">Tambah Kas</a>
                         <?php endif; ?>
 
-                        <a href="./download_pdf.php?type=kas" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                        <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
+                            <a href="./download_pdf.php?type=kas&start_date=<?= $filter["start_date"] ?>&end_date=<?= $filter["end_date"] ?>" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                        <?php else :  ?>
+                            <a href="./download_pdf.php?type=kas" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                        <?php endif; ?>
+
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
@@ -112,7 +121,7 @@ $total = sumAllKas();
                                                 ?>
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
-                                                        <td><?= $val['transaction_type'] == "Kredit" ? $val['jml_donasi'] == 0 ? $val['tgl_infaq'] : $val['tgl_donasi'] : $val['tgl_kaskeluar'] ?></td>
+                                                        <td><?= $val['tgl_kas'] ?></td>
                                                         <td><?= $val['ket_kaskeluar'] == "No Description" ? $val['ket_kasmasuk'] : $val['ket_kaskeluar'] ?></td>
                                                         <td>Rp. <?= $val['jml_donasi'] == 0 ? number_format($val['jml_infaq'], 0, ',', '.') : number_format($val['jml_donasi'], 0, ',', '.') ?></td>
 
@@ -132,19 +141,26 @@ $total = sumAllKas();
                                                         <?php endif; ?>
                                                     </tr>
                                             <?php
+
+                                                    $sum_current['total_kasmasuk'] = $sum_current['total_kasmasuk'] + $val['jml_kasmasuk'];
+                                                    $sum_current['total_kaskeluar'] = $sum_current['total_kaskeluar'] + $val['jml_kaskeluar'];
+                                                    $sum_current['total_saldo'] = $sum_current['total_saldo'] + $val['saldo_kas'];
                                                 }
                                             }
 
                                             ?>
+
+
                                             <tr class="border border-white">
                                                 <td></td>
                                                 <td></td>
                                                 <td>Total</td>
-                                                <td>Rp. <?= number_format($total['total_kasmasuk'], 0, ',', '.'); ?></td>
-                                                <td>Rp. <?= number_format($total['total_kaskeluar'], 0, ',', '.'); ?></td>
-                                                <td>Rp. <?= number_format($total['total_saldo'], 0, ',', '.'); ?></td>
+                                                <td>Rp. <?= number_format($sum_current['total_kasmasuk'], 0, ',', '.'); ?></td>
+                                                <td>Rp. <?= number_format($sum_current['total_kaskeluar'], 0, ',', '.'); ?></td>
+                                                <td>Rp. <?= number_format($sum_current['total_saldo'], 0, ',', '.'); ?></td>
                                                 <td></td>
                                             </tr>
+
                                         </tbody>
                                     </table>
                                 </div>

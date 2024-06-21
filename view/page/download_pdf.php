@@ -4,17 +4,19 @@
 require '../../vendor/autoload.php';
 include "../../bootstrap/db.php";
 include "../../controller/pdf.controller.php";
-include "../../controller/infaq.controller.php";
-include "../../controller/pengeluaran.controller.php";
-include "../../controller/donasi.controller.php";
+include "../../controller/kas.keluar.controller.php";
+include "../../controller/kas.masuk.controller.php";
 include "../../controller/kas.controller.php";
 
 $type = $_GET['type'];
 
 //data
-$filter = ["start_date" => "", "end_date" => ""];
+$filter = [
+    'start_date' => isset($_GET['start_date']) ? $_GET['start_date'] : '',
+    'end_date' => isset($_GET['end_date']) ? $_GET['end_date'] : '',
+];
 
 
-generatePdf($type);
+generatePdf($type, $filter);
 
 header("Location : $type.php");

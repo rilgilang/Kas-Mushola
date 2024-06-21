@@ -66,8 +66,6 @@ $filter = [
                         <?php if (isAdminOrTakmir("donasi.php")) : ?>
                             <a href="./tambah_donasi.php" class="btn btn-primary font-weight-bold text-white">Tambah Donasi</a>
                         <?php endif; ?>
-
-                        <a href="./download_pdf.php?type=donasi" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">

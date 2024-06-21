@@ -13,6 +13,9 @@ $filter = [
 ];
 
 
+$total = 0;
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,7 +72,11 @@ $filter = [
                             <a href="./tambah_kas_keluar.php" class="btn btn-primary font-weight-bold text-white">Tambah Kas Keluar</a>
                         <?php endif; ?>
 
-                        <a href="./download_pdf.php?type=kas_keluar" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                        <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
+                            <a href="./download_pdf.php?type=kas_keluar&start_date=<?= $filter["start_date"] ?>&end_date=<?= $filter["end_date"] ?>" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                        <?php else :  ?>
+                            <a href="./download_pdf.php?type=kas_keluar" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                        <?php endif; ?>
                     </div>
 
 
@@ -138,6 +145,7 @@ $filter = [
 
                                                     </tr>
                                             <?php
+                                                    $total = $total + $val['jml_kaskeluar'];
                                                 }
                                             }
 
@@ -148,7 +156,7 @@ $filter = [
                                                 <td></td>
                                                 <td></td>
                                                 <td>Total</td>
-                                                <td>Rp. <?= number_format(sumAllKasKeluar()['jml_kaskeluar'], 0, ',', '.'); ?></td>
+                                                <td>Rp. <?= number_format($total, 0, ',', '.'); ?></td>
                                                 <td></td>
                                             </tr>
                                         </tbody>

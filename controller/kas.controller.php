@@ -24,12 +24,7 @@ function getAllKas($filter)
         $startDate = $filter["start_date"];
         $endDate = $filter["end_date"];
 
-        $filter_query = "WHERE 
-         (km.tgl_kasmasuk BETWEEN '$startDate' AND '$endDate' OR
-         i.tgl_infaq BETWEEN '$startDate' AND '$endDate' OR
-         d.tgl_donasi BETWEEN '$startDate' AND '$endDate' OR
-         kk.tgl_kaskeluar BETWEEN '$startDate' AND '$endDate' OR
-         dt.tgl_transaksi_keluar BETWEEN '$startDate' AND '$endDate')";
+        $filter_query = "WHERE tgl_kas BETWEEN '$startDate' AND '$endDate' ";
     } else {
         $filter_query = "ORDER BY kas_created_at ASC";
     }
@@ -37,6 +32,7 @@ function getAllKas($filter)
     $query = "SELECT 
             k.id_kas,
             COALESCE(k.saldo_kas, 0) AS saldo_kas,
+            COALESCE(k.tgl_kas, '0000-00-00') AS tgl_kas,
             COALESCE(k.created_at, '0000-00-00') AS kas_created_at,
             COALESCE(km.tgl_kasmasuk, '0000-00-00') AS tgl_kasmasuk,
             COALESCE(km.jml_kasmasuk, 0) AS jml_kasmasuk,

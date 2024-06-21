@@ -108,7 +108,7 @@ function updatePengeluaranById($pengeluaran_id, $data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['jenis_transaksi_keluar'], $data['jml_transaksi_keluar'], $data['tgl_transaksi_keluar'], $data['file'], $pengeluaran_id]);
-        return "success";
+        header("Location: pengeluaran.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();

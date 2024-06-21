@@ -68,8 +68,6 @@ $filter = [
                         <?php if (isAdminOrTakmir()) : ?>
                             <a href="./tambah_infaq.php" class="btn btn-primary font-weight-bold text-white">Tambah Infaq</a>
                         <?php endif; ?>
-
-                        <a href="./download_pdf.php?type=infaq" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
                     </div>
 
 
