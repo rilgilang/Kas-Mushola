@@ -9,39 +9,7 @@ function getDashboardData()
         'total_donasi' => sumAllDonasi() != false ?  sumAllDonasi()['total_donasi'] : 0,
         'total_pengeluaran' => sumAllPengeluaran() != false ? sumAllPengeluaran()['total_kaskeluar'] : 0,
         'total_saldo' => getLatestSaldo() != false ? getLatestSaldo()['saldo_kas'] : 0,
-        'graph' => null
     ];
-
-    $query_graph = "WITH RECURSIVE months AS (
-        SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 4 MONTH), '%Y-%m-01') AS month_start
-        UNION ALL
-        SELECT DATE_ADD(month_start, INTERVAL 1 MONTH)
-        FROM months
-        WHERE month_start < CURDATE() - INTERVAL DAY(CURDATE()) - 1 DAY
-    )
-    
-    SELECT
-        DATE_FORMAT(m.month_start, '%Y-%m') AS month_number,
-        MONTHNAME(m.month_start) AS month_name,
-        COALESCE(SUM(km.jml_kasmasuk), 0) AS total_kasmasuk,
-        COALESCE(SUM(kk.jml_kaskeluar), 0) AS total_kaskeluar
-    FROM
-        months m
-    LEFT JOIN
-        kas_masuk km ON DATE_FORMAT(km.tgl_kasmasuk, '%Y-%m') = DATE_FORMAT(m.month_start, '%Y-%m')
-    LEFT JOIN
-        kas_keluar kk ON DATE_FORMAT(kk.tgl_kaskeluar, '%Y-%m') = DATE_FORMAT(m.month_start, '%Y-%m')
-    GROUP BY
-        DATE_FORMAT(m.month_start, '%Y-%m')
-    ORDER BY
-        month_number DESC;";
-
-
-    $stmt = $pdo->prepare($query_graph);
-    $stmt->execute();
-    $graph = $stmt->fetchAll();
-
-    $result['graph'] = $graph;
 
     return $result;
 }
@@ -184,30 +152,27 @@ function updateKas($id, $data)
 {
     global $pdo;
 
-    //update kas
-    $query = "UPDATE kas
-       SET tgl_kas = ?, id_kasmasuk = ?, jml_kasmasuk = ?, saldo_kas = ?
-       WHERE id_kas = ?;";
 
-    if ($data['trx_type'] == "kredit") {
-        $query = "UPDATE kas
-        SET tgl_kas = ?, id_kaskeluar = ?, jml_kaskeluar = ?, saldo_kas = ?
-        WHERE id_kas = ?;";
-
-        try {
-            $stmt = $pdo->prepare($query);
-            $stmt->execute([$data['tgl_kas'], $data['id_kaskeluar'], $data['jml_kaskeluar'], $data['saldo_kas'], $id]);
-            header("Location: kas.php");
-        } catch (PDOException $e) {
-            //error
-            return $e->getMessage();
-        }
-    }
+    $query = "UPDATE kas SET 
+        tgl_kas = ?,
+        id_kaskeluar = ?,
+        jml_kaskeluar = ?,
+        id_kasmasuk = ?,
+        jml_kasmasuk = ?,
+        saldo_kas = ?
+        WHERE id_kas = '$id'";
 
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['tgl_kas'], $data['id_kasmasuk'], $data['jml_kasmasuk'], $data['saldo_kas'], $id]);
-        header("Location: kas.php");
+        $stmt->execute([
+            $data['tgl_kas'],
+            $data['id_kaskeluar'],
+            $data['jml_kaskeluar'],
+            $data['id_kasmasuk'],
+            $data['jml_kasmasuk'],
+            $data['saldo_kas']
+        ]);
+        return "success";
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
@@ -255,32 +220,23 @@ function addKas($data)
 {
     global $pdo;
 
-    // Determine the latest transaction type
-    $latestTrxType = $data['trx_type'];
-
-    // Insert into kas table based on the latest transaction type
-    if ($latestTrxType == "kredit") {
-        // Insert as kredit
-        $query = "INSERT INTO kas (id_kas, id_kaskeluar, jml_kaskeluar, saldo_kas) VALUES (?, ?, ?, ?)";
-        try {
-            $stmt = $pdo->prepare($query);
-            $stmt->execute([$data['id_kas'], $data['id_kaskeluar'], $data['jml_kaskeluar'], $data['saldo_kas']]);
-            header("Location: kas.php");
-        } catch (PDOException $e) {
-            // Handle error
-            return $e->getMessage();
-        }
-    } else {
-        // Insert as debit
-        $query = "INSERT INTO kas (id_kas, id_kasmasuk, jml_kasmasuk, saldo_kas) VALUES (?, ?, ?, ?)";
-        try {
-            $stmt = $pdo->prepare($query);
-            $stmt->execute([$data['id_kas'], $data['id_kasmasuk'], $data['jml_kasmasuk'], $data['saldo_kas']]);
-            header("Location: kas.php");
-        } catch (PDOException $e) {
-            // Handle error
-            return $e->getMessage();
-        }
+    // Insert as kredit
+    $query = "INSERT INTO kas (id_kas, tgl_kas, id_kaskeluar, jml_kaskeluar, id_kasmasuk, jml_kasmasuk, saldo_kas) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    try {
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([
+            $data['id_kas'],
+            $data['tgl_kas'],
+            $data['id_kaskeluar'],
+            $data['jml_kaskeluar'],
+            $data['id_kasmasuk'],
+            $data['jml_kasmasuk'],
+            $data['saldo_kas']
+        ]);
+        header("Location: kas.php");
+    } catch (PDOException $e) {
+        // Handle error
+        return $e->getMessage();
     }
 }
 
@@ -300,90 +256,3 @@ function getLatestTrxBeforeDate($date)
 
     return $result;
 }
-
-
-
-// function getLatestTypeTrx()
-// {
-//     global $pdo;
-
-//     $kas_masuk = getLatestKasMasuk();
-//     $kas_keluar = getLatestKasKeluar();
-//     $kas = getLatestKas();
-
-//     if ($kas_masuk == false && $kas_keluar == false) {
-//         return false;
-//     }
-
-//     $latest = [
-//         "type" => $kas_masuk == false ? 'kredit' : 'debit',
-//         "latest_saldo" => $kas == false ? 0 : $kas['saldo_kas'],
-//         "latest_total_kasmasuk" => $kas_masuk == false ? 0 : $kas_masuk['jml_kasmasuk'],
-//         "latest_total_kaskeluar" => $kas_keluar == false ? 0 : $kas_keluar['jml_kaskeluar'],
-//     ];
-
-//     return $latest;
-// }
-
-
-
-// function generateAllIdForKas($type)
-// {
-//     $donasi_id = "KD0001";
-//     $infaq_id = "KI0001";
-//     $kasmasuk_id = "KM001";
-//     $detail_transaksi_keluar_id = "DK001";
-//     $kaskeluar_id = "KK001";
-//     $kas_id = "K001";
-//     $kasmasuk = getLatestKasMasuk();
-//     $kaskeluar = getLatestKasKeluar();
-//     $kas = getLatestKas();
-
-//     if ($kasmasuk != false) {
-//         $kasmasuk_id = generateKasMasukId($kasmasuk['id_kasmasuk']);
-//     }
-
-
-//     if ($kaskeluar != false) {
-//         $kaskeluar_id = generateKasKeluarId($kaskeluar['id_kaskeluar']);
-//     }
-
-//     if ($kas != false) {
-//         $kas_id = generateKasId($kas['id_kas']);
-//     }
-
-//     switch ($type) {
-//         case 'donasi':
-//             $donasi = getLatestDonasi();
-//             if ($donasi != false) {
-//                 $donasi_id = generateDonasiId($donasi['id_donasi']);
-//             }
-//             break;
-
-//         case 'infaq':
-//             $infaq = getLatestInfaq();
-//             if ($infaq != false) {
-//                 $infaq_id = generateInfaqId($infaq['id_infaq']);
-//             }
-//             break;
-
-//         case 'pengeluaran':
-//             $pengeluaran = getLatestPengeluaran();
-//             if ($pengeluaran != false) {
-//                 $detail_transaksi_keluar_id = generatePengeluaranId($pengeluaran['id_transaksi_keluar']);
-//             }
-//             break;
-
-//         default:
-//             break;
-//     }
-
-//     return [
-//         'donasi_id' => $donasi_id,
-//         'infaq_id' => $infaq_id,
-//         'kasmasuk_id' => $kasmasuk_id,
-//         'kas_id' => $kas_id,
-//         'transaksi_keluar_id' => $detail_transaksi_keluar_id,
-//         'kas_keluar_id' => $kaskeluar_id
-//     ];
-// }

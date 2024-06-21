@@ -120,17 +120,11 @@ function updateInfaq($infaqId, $data)
     try {
         $stmt = $pdo->prepare($query);
         $stmt->execute([$data['jenis_infaq'], $data['jml_infaq'], $data['tgl_infaq'], $infaqId]);
+        header("Location: infaq.php");
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
     }
-
-    $data['tgl_kasmasuk'] = $data['tgl_infaq'];
-    $data['jml_kasmasuk'] = $data['jml_infaq'];
-
-    syncKasMasuk($data, $infaq['created_at']);
-
-    syncSaldo($math_op_query, $infaq['created_at']);
 }
 
 

@@ -7,6 +7,7 @@ include '../../controller/kas.keluar.controller.php';
 checkLogin();
 if (!isAdminOrTakmir()) {
     header("Location: kas_keluar.php");
+    exit();
 }
 
 $filter = [
@@ -84,7 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">ID Transaksi Kas Keluar</label>
                                         <div class="col-sm-3 align-self-center">
                                             <select class="form-control" id="id_transaksi_keluar" name="id_transaksi_keluar">
-
                                                 <?php foreach ($kasKeluarList as $key => $kaskeluar) { ?>
                                                     <option value="<?= $kaskeluar['id_transaksi_keluar'] ?>"><?= $kaskeluar['id_transaksi_keluar'] ?></option>
                                                 <?php } ?>
@@ -135,23 +135,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <script>
         const kasKeluarList = <?php echo json_encode($kasKeluarList); ?>;
-        const idKasKeluar = document.getElementById('id_transaksi_keluar').value
-
-
 
         function toggleFields() {
+            var idKasKeluar = document.getElementById('id_transaksi_keluar').value;
             var selectedKasKeluar = kasKeluarList.find(kasKeluar => kasKeluar.id_transaksi_keluar == idKasKeluar);
-            document.getElementById('ket_kaskeluar').value = selectedKasKeluar.jenis_transaksi_keluar;
-            document.getElementById('jml_kaskeluar').value = selectedKasKeluar.jml_transaksi_keluar;
+            if (selectedKasKeluar) {
+                document.getElementById('ket_kaskeluar').value = selectedKasKeluar.jenis_transaksi_keluar;
+                document.getElementById('jml_kaskeluar').value = selectedKasKeluar.jml_transaksi_keluar;
+            }
         }
 
-
-
         document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('id_transaksi_keluar').addEventListener('change', toggleFields);
             toggleFields(); // Call on page load
-            document.getElementById('id_kaskeluar').addEventListener('change', function() {
-                toggleFields();
-            });
         });
     </script>
 </body>
