@@ -113,7 +113,7 @@ $filter = [
                                                         <td><?= $val['id_transaksi_keluar'] ?></td>
                                                         <td><?= $val['tgl_transaksi_keluar'] ?></td>
                                                         <td><?= $val['jenis_transaksi_keluar'] ?></td>
-                                                        <td><?= $val['jml_transaksi_keluar'] ?></td>
+                                                        <td>Rp. <?= number_format($val['jml_transaksi_keluar'], 0, ',', '.'); ?></td>
                                                         <?php if (isAdminOrTakmir()) : ?>
                                                             <td>
                                                                 <a type="button" href="./edit_pengeluaran.php?id=<?= $val['id_transaksi_keluar'] ?>" class="btn btn-outline-secondary btn-icon-text">

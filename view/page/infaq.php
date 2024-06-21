@@ -119,7 +119,7 @@ $filter = [
                                                         <td><?= $val['id_infaq'] ?></td>
                                                         <td><?= $val['tgl_infaq'] ?></td>
                                                         <td><?= $val['jenis_infaq'] ?></td>
-                                                        <td><?= $val['jml_infaq'] ?></td>
+                                                        <td>Rp. <?= number_format($val['jml_infaq'], 0, ',', '.'); ?></td>
 
                                                         <?php if (isAdminOrTakmir()) : ?>
                                                             <td>

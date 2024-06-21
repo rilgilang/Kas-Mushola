@@ -125,7 +125,7 @@ $filter = [
                                                         <td><?= $val['id_infaq'] ?></td>
                                                         <td><?= $val['id_donasi'] ?></td>
                                                         <td><?= $val['ket_kasmasuk'] ?></td>
-                                                        <td><?= $val['jml_kasmasuk'] ?></td>
+                                                        <td>Rp. <?= number_format($val['jml_kasmasuk'], 0, ',', '.'); ?></td>
 
                                                         <?php if (isAdminOrTakmir()) : ?>
                                                             <td>

@@ -114,7 +114,7 @@ $filter = [
                                                         <td><?= $val['id_donasi'] ?></td>
                                                         <td><?= $val['tgl_donasi'] ?></td>
                                                         <td><?= $val['nama_donatur'] ?></td>
-                                                        <td><?= $val['jml_donasi'] ?></td>
+                                                        <td>Rp. <?= number_format($val['jml_donasi'], 0, ',', '.'); ?></td>
 
                                                         <?php if (isAdminOrTakmir()) : ?>
                                                             <td>

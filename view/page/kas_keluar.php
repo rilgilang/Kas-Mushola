@@ -120,7 +120,7 @@ $filter = [
                                                         <td><?= $val['id_transaksi_keluar'] ?></td>
                                                         <td><?= $val['tgl_kaskeluar'] ?></td>
                                                         <td><?= $val['ket_kaskeluar'] ?></td>
-                                                        <td><?= $val['jml_kaskeluar'] ?></td>
+                                                        <td>Rp. <?= number_format($val['jml_kaskeluar'], 0, ',', '.'); ?></td>
 
                                                         <?php if (isAdminOrTakmir()) : ?>
                                                             <td>

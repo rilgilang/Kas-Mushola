@@ -113,9 +113,10 @@ $filter = [
                                                         <td><?= $key + 1 ?></td>
                                                         <td><?= $val['transaction_type'] == "Kredit" ? $val['jml_donasi'] == 0 ? $val['tgl_infaq'] : $val['tgl_donasi'] : $val['tgl_kaskeluar'] ?></td>
                                                         <td><?= $val['ket_kaskeluar'] == "No Description" ? $val['ket_kasmasuk'] : $val['ket_kaskeluar'] ?></td>
-                                                        <td><?= $val['jml_donasi'] == 0 ? $val['jml_infaq'] : $val['jml_donasi'] ?></td>
-                                                        <td><?= $val['jml_transaksi_keluar'] ?></td>
-                                                        <td><?= $val['saldo_kas'] ?></td>
+                                                        <td>Rp. <?= $val['jml_donasi'] == 0 ? number_format($val['jml_infaq'], 0, ',', '.') : number_format($val['jml_donasi'], 0, ',', '.') ?></td>
+
+                                                        <td>Rp. <?= number_format($val['jml_transaksi_keluar'], 0, ',', '.'); ?></td>
+                                                        <td>Rp. <?= number_format($val['saldo_kas'], 0, ',', '.'); ?></td>
                                                         <?php if (isAdminOrTakmir()) : ?>
                                                             <td>
                                                                 <a type="button" href="./edit_kas.php?id=<?= $val['id_kas'] ?>" class="btn btn-outline-secondary btn-icon-text">

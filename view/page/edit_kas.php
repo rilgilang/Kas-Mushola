@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <input type="text" name="trx_type" id="trx_type" value="<?= $kasData['id_kaskeluar'] ? 'kredit' : 'debit' ?>" hidden>
 
                                     <button type="submit" class="btn btn-primary me-2">Submit</button>
-                                    <button class="btn btn-light">Cancel</button>
+                                    <a href="./kas.php" class="btn btn-light">Cancel</a>
                                 </form>
                             </div>
                         </div>
