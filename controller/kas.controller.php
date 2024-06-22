@@ -216,6 +216,9 @@ function addKas($data)
 {
     global $pdo;
 
+    $latestKas = getLatestKas();
+    $saldo = $data['saldo_kas'] + $latestKas['saldo_kas'];
+
     // Insert as kredit
     $query = "INSERT INTO kas (id_kas, tgl_kas, id_kaskeluar, jml_kaskeluar, id_kasmasuk, jml_kasmasuk, saldo_kas) VALUES (?, ?, ?, ?, ?, ?, ?)";
     try {
@@ -227,7 +230,7 @@ function addKas($data)
             $data['jml_kaskeluar'],
             $data['id_kasmasuk'],
             $data['jml_kasmasuk'],
-            $data['saldo_kas']
+            $saldo
         ]);
         header("Location: kas.php");
     } catch (PDOException $e) {

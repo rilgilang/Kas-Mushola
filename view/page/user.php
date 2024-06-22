@@ -42,7 +42,7 @@ checkLogin();
                                                 <th>Nama</th>
                                                 <th>Username</th>
                                                 <th>Level</th>
-                                                <?php if (isAdminOrTakmir()) : ?>
+                                                <?php if (isAdmin()) : ?>
                                                     <th>Aksi</th>
                                                 <?php endif; ?>
                                             </tr>
@@ -57,7 +57,7 @@ checkLogin();
                                                     <td><?= $val['nama'] ?></td>
                                                     <td><?= $val['username'] ?></td>
                                                     <td><?= $val['usertype'] ?></td>
-                                                    <?php if (isAdminOrTakmir()) : ?>
+                                                    <?php if (isAdmin()) : ?>
                                                         <td>
                                                             <a type="button" href="./edit_user.php?id=<?= $val['id_user'] ?>" class="btn btn-outline-secondary btn-icon-text">
                                                                 Edit
