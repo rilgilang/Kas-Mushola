@@ -14,7 +14,7 @@ $filter = [
 $sum_current = [
     "total_kasmasuk" => 0,
     "total_kaskeluar" => 0,
-    "total_saldo" => sumAllKas()['total_saldo'],
+    "total_saldo" => 0,
 ];
 ?>
 <!DOCTYPE html>
@@ -144,6 +144,7 @@ $sum_current = [
 
                                                     $sum_current['total_kasmasuk'] = $sum_current['total_kasmasuk'] + $val['jml_kasmasuk'];
                                                     $sum_current['total_kaskeluar'] = $sum_current['total_kaskeluar'] + $val['jml_kaskeluar'];
+                                                    $sum_current['total_saldo'] =  $val['jml_kaskeluar'];
                                                 }
                                             }
 
