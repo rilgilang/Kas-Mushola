@@ -59,7 +59,7 @@ $total = 0;
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="d-flex justify-content-end">
-                                                    <button type="submit" class="btn btn-primary font-weight-bold text-white">Cari</button>
+                                                    <button type="submit" class="btn btn-primary fw-bold text-white">Cari</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -70,13 +70,13 @@ $total = 0;
                     </div>
                     <div class="d-flex justify-content-between grid-margin">
                         <?php if (isAdminOrTakmir()) : ?>
-                            <a href="./tambah_kas_masuk.php" class="btn btn-primary font-weight-bold text-white">Tambah Kas Masuk</a>
+                            <a href="./tambah_kas_masuk.php" class="btn btn-primary fw-bold text-white">Tambah Kas Masuk</a>
                         <?php endif; ?>
 
                         <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
-                            <a href="./download_pdf.php?type=kas_masuk&start_date=<?= $filter["start_date"] ?>&end_date=<?= $filter["end_date"] ?>" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                            <a href="./download_pdf.php?type=kas_masuk&start_date=<?= $filter["start_date"] ?>&end_date=<?= $filter["end_date"] ?>" class="btn btn-primary fw-bold text-white">Export Laporan</a>
                         <?php else :  ?>
-                            <a href="./download_pdf.php?type=kas_masuk" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
+                            <a href="./download_pdf.php?type=kas_masuk" class="btn btn-primary fw-bold text-white">Export Laporan</a>
                         <?php endif; ?>
                     </div>
 
@@ -175,12 +175,12 @@ $total = 0;
                 </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
-                <footer class="footer">
+                <!-- <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com </a>2021</span>
                         <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Only the best <a href="https://www.bootstrapdash.com/" target="_blank"> Bootstrap dashboard </a> templates</span>
                     </div>
-                </footer>
+                </footer> -->
                 <!-- partial -->
             </div>
             <!-- main-panel ends -->

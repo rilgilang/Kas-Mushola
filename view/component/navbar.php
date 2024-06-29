@@ -12,6 +12,9 @@
         <ul class="navbar-nav navbar-nav-right">
 
             <li class="nav-item nav-profile dropdown">
+                <div class="text-center pt-2 fw-light mx-5">
+                    <p class="fs-4">Si Aliran Kas Mushola</p>
+                </div>
                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
                     <img src="../../images/user.svg" alt="profile" />
                 </a>

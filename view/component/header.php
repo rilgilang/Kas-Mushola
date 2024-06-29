@@ -13,3 +13,32 @@
 <link rel="stylesheet" href="../../css/style.css">
 <!-- endinject -->
 <link rel="shortcut icon" href="../../images/favicon.png" />
+
+<style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+    }
+
+    .container-scroller,
+    .main-panel {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .content-wrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background-image: url('../../images/dashboard/background.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .footer {
+        background: transparent;
+        /* Make footer background transparent to show the content background */
+    }
+</style>

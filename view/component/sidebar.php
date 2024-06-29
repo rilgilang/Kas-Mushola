@@ -1,6 +1,6 @@
 <?php ?>
 
-<nav class="sidebar sidebar-offcanvas" id="sidebar">
+<nav class="sidebar sidebar-offcanvas" id="sidebar" style="background-color: #2F3645;">
     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link" href="../page/dashboard.php">

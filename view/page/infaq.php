@@ -55,7 +55,7 @@ $filter = [
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="d-flex justify-content-end">
-                                                    <button type="submit" class="btn btn-primary font-weight-bold text-white">Cari</button>
+                                                    <button type="submit" class="btn btn-primary fw-bold text-white">Cari</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -66,7 +66,7 @@ $filter = [
                     </div>
                     <div class="d-flex justify-content-between grid-margin">
                         <?php if (isAdminOrTakmir()) : ?>
-                            <a href="./tambah_infaq.php" class="btn btn-primary font-weight-bold text-white">Tambah Infaq</a>
+                            <a href="./tambah_infaq.php" class="btn btn-primary fw-bold text-white">Tambah Infaq</a>
                         <?php endif; ?>
                     </div>
 
@@ -152,12 +152,12 @@ $filter = [
                 </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
-                <footer class="footer">
+                <!-- <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com </a>2021</span>
                         <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Only the best <a href="https://www.bootstrapdash.com/" target="_blank"> Bootstrap dashboard </a> templates</span>
                     </div>
-                </footer>
+                </footer> -->
                 <!-- partial -->
             </div>
             <!-- main-panel ends -->

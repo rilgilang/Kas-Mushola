@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password" name="password">
                                 </div>
                                 <div class="mt-3">
-                                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-bold auth-form-btn" href="../../index.html">SIGN IN</button>
+                                    <button type="submit" class="btn btn-block btn-primary btn-lg fw-bold auth-form-btn" href="../../index.html">SIGN IN</button>
                                 </div>
                                 <div class="my-2 d-flex justify-content-between align-items-center">
                                 </div>
