@@ -216,26 +216,32 @@ function addKas($data)
 {
     global $pdo;
 
-    $latestKas = getLatestKas();
-    $saldo = $data['saldo_kas'] + $latestKas['saldo_kas'];
+    // Determine the latest transaction type
+    $latestTrxType = $data['trx_type'];
 
-    // Insert as kredit
-    $query = "INSERT INTO kas (id_kas, tgl_kas, id_kaskeluar, jml_kaskeluar, id_kasmasuk, jml_kasmasuk, saldo_kas) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    try {
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([
-            $data['id_kas'],
-            $data['tgl_kas'],
-            $data['id_kaskeluar'],
-            $data['jml_kaskeluar'],
-            $data['id_kasmasuk'],
-            $data['jml_kasmasuk'],
-            $saldo
-        ]);
-        header("Location: kas.php");
-    } catch (PDOException $e) {
-        // Handle error
-        return $e->getMessage();
+    // Insert into kas table based on the latest transaction type
+    if ($latestTrxType == "kredit") {
+        // Insert as kredit
+        $query = "INSERT INTO kas (id_kas, tgl_kas, id_kaskeluar, jml_kaskeluar, saldo_kas) VALUES (?, ?, ?, ?, ?)";
+        try {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$data['id_kas'], $data['tgl_kas'], $data['id_kaskeluar'], $data['jml_kaskeluar'], $data['saldo_kas']]);
+            header("Location: kas.php");
+        } catch (PDOException $e) {
+            // Handle error
+            return $e->getMessage();
+        }
+    } else {
+        // Insert as debit
+        $query = "INSERT INTO kas (id_kas, tgl_kas, id_kasmasuk, jml_kasmasuk, saldo_kas) VALUES (?, ?, ?, ?, ?)";
+        try {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([$data['id_kas'], $data['tgl_kas'], $data['id_kasmasuk'], $data['jml_kasmasuk'], $data['saldo_kas']]);
+            header("Location: kas.php");
+        } catch (PDOException $e) {
+            // Handle error
+            return $e->getMessage();
+        }
     }
 }
 

@@ -32,7 +32,7 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        background-image: url('../../images/dashboard/background.jpg');
+        background-image: url('../../images/dashboard/background2.jpg');
         background-size: cover;
         background-repeat: no-repeat;
     }
