@@ -74,8 +74,6 @@ $total = 0;
 
                         <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
                             <a href="./download_pdf.php?type=kas_keluar&start_date=<?= $filter["start_date"] ?>&end_date=<?= $filter["end_date"] ?>" class="btn btn-primary fw-bold text-white">Export Laporan</a>
-                        <?php else :  ?>
-                            <a href="./download_pdf.php?type=kas_keluar" class="btn btn-primary fw-bold text-white">Export Laporan</a>
                         <?php endif; ?>
                     </div>
 
@@ -83,7 +81,13 @@ $total = 0;
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Kas</h4>
+                                <div class="py-2">
+                                    <p class="text-center fs-5">Laporan Kas Keluar</p>
+                                    <p class="text-center fs-5">Mushola Rahmatullah</p>
+                                    <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
+                                        <p class="text-center fs-5">Periode <?= $filter["start_date"] ?> s/d <?= $filter["end_date"] ?></p>
+                                    <?php endif; ?>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>

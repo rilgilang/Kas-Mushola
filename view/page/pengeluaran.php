@@ -70,7 +70,13 @@ $filter = [
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Pengeluaran</h4>
+                                <div class="py-2">
+                                    <p class="text-center fs-5">Laporan Pengeluaran</p>
+                                    <p class="text-center fs-5">Mushola Rahmatullah</p>
+                                    <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
+                                        <p class="text-center fs-5">Periode <?= $filter["start_date"] ?> s/d <?= $filter["end_date"] ?></p>
+                                    <?php endif; ?>
+                                </div>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
