@@ -60,7 +60,8 @@ function kasMasukTemplate($filter)
 
             $value .= "<tr>";
             $value .= "<td>$number</td>";
-            $value .= "<td>$tanggal</td>";
+            $new_date = date_format(date_create($tanggal), "d-m-Y");
+            $value .= "<td>$new_date</td>";
             $value .= "<td>$keterangan</td>";
             $value .= "<td>Rp. " . number_format($jumlah, 0, ',', '.') . "</td>";
             $value .= "</tr>";
@@ -120,12 +121,19 @@ function kasMasukTemplate($filter)
             tr:hover {
                 background-color: #f1f1f1;
             }
+            .center {
+                text-align: center;
+                margin: auto;
+                width: 50%;
+                padding: 10px;
+            }
         </style>
     </head>
     
     <body>
         <div class="table-container">
-            <div class="table-title">Laporan Kas Masuk</div>
+        <div class="table-title">Laporan Kas Masuk</div>
+        <p class="center">Periode ' .  date_format(date_create($filter["start_date"]), "d-m-Y") . ' s/d ' . date_format(date_create($filter["end_date"]), "d-m-Y") . ' </p>
             <table>
                 <thead>
                     <tr>
@@ -170,7 +178,8 @@ function kasKeluarTemplate($filter)
 
             $value .= "<tr>";
             $value .= "<td>$number</td>";
-            $value .= "<td>$tanggal</td>";
+            $new_date = date_format(date_create($tanggal), "d-m-Y");
+            $value .= "<td>$new_date</td>";
             $value .= "<td>$keterangan</td>";
             $value .= "<td>Rp. " . number_format($jumlah, 0, ',', '.') . "</td>";
             $value .= "</tr>";
@@ -229,12 +238,19 @@ function kasKeluarTemplate($filter)
             tr:hover {
                 background-color: #f1f1f1;
             }
+            .center {
+                text-align: center;
+                margin: auto;
+                width: 50%;
+                padding: 10px;
+            }
         </style>
     </head>
     
     <body>
         <div class="table-container">
-            <div class="table-title">Laporan Kas Keluar</div>
+        <div class="table-title">Laporan Kas Keluar</div>
+        <p class="center">Periode ' . date_format(date_create($filter["start_date"]), "d-m-Y")  . ' s/d ' . date_format(date_create($filter["end_date"]), "d-m-Y") . ' </p>
             <table>
                 <thead>
                     <tr>
@@ -288,7 +304,8 @@ function kasTemplate($filter)
 
             $value .= "<tr>";
             $value .= "<td>$number</td>";
-            $value .= "<td>$tanggal</td>";
+            $new_date = date_format(date_create($tanggal), "d-m-Y");
+            $value .= "<td>$new_date</td>";
             $value .= "<td>$keterangan</td>";
             $value .= "<td>Rp. " . number_format($debit, 0, ',', '.') . "</td>";
             $value .= "<td>Rp. " . number_format($kredit, 0, ',', '.') . "</td>";
@@ -355,12 +372,19 @@ function kasTemplate($filter)
             tr:hover {
                 background-color: #f1f1f1;
             }
+            .center {
+                text-align: center;
+                margin: auto;
+                width: 50%;
+                padding: 10px;
+            }
         </style>
     </head>
     
     <body>
         <div class="table-container">
             <div class="table-title">Laporan Kas</div>
+            <p class="center">Periode ' . date_format(date_create($filter["start_date"]), "d-m-Y")  . ' s/d ' . date_format(date_create($filter["end_date"]), "d-m-Y") . ' </p>
             <table>
                 <thead>
                     <tr>

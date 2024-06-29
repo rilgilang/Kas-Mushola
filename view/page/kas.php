@@ -58,7 +58,7 @@ $sum_current = [
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="d-flex justify-content-end">
-                                                    <button type="submit" class="btn btn-primary fw-bold text-white">Cari</button>
+                                                    <button type="submit" class="btn btn-primary font-weight-bold text-white">Cari</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -69,38 +69,32 @@ $sum_current = [
                     </div>
                     <div class="d-flex justify-content-between grid-margin">
                         <?php if (isAdminOrTakmir()) : ?>
-                            <a href="./tambah_kas.php" class="btn btn-primary fw-bold text-white">Tambah Kas</a>
+                            <a href="./tambah_kas.php" class="btn btn-primary font-weight-bold text-white">Tambah Kas</a>
                         <?php endif; ?>
 
                         <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
-                            <a href="./download_pdf.php?type=kas&start_date=<?= $filter["start_date"] ?>&end_date=<?= $filter["end_date"] ?>" class="btn btn-primary fw-bold text-white">Export Laporan</a>
+                            <a href="./download_pdf.php?type=kas&start_date=<?= $filter["start_date"] ?>&end_date=<?= $filter["end_date"] ?>" class="btn btn-primary font-weight-bold text-white">Export Laporan</a>
                         <?php endif; ?>
 
                     </div>
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <div class="py-2">
-                                    <p class="text-center fs-5">Laporan Kas</p>
-                                    <p class="text-center fs-5">Mushola Rahmatullah</p>
-                                    <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
-                                        <p class="text-center fs-5">Periode <?= $filter["start_date"] ?> s/d <?= $filter["end_date"] ?></p>
-                                    <?php endif; ?>
-                                </div>
-
-
+                                <h4 class="card-title">Kas</h4>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
+                                                <th>Id Kas</th>
                                                 <th>Tanggal</th>
-                                                <th>Keterangan</th>
-                                                <th>Debit</th>
-                                                <th>Kredit</th>
+                                                <th>Id Kas Masuk</th>
+                                                <th>Id Kas Keluar</th>
+                                                <th>Jumlah Kas Masuk</th>
+                                                <th>Jumlah Kas Keluar</th>
                                                 <th>Saldo</th>
                                                 <?php if (isAdminOrTakmir()) : ?>
-                                                    <th>Aksi</th>
+                                                    <th>Opsi</th>
                                                 <?php endif; ?>
                                             </tr>
                                         </thead>
@@ -117,6 +111,8 @@ $sum_current = [
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <td></td>
+                                                    <td></td>
                                                     <?php if (isAdminOrTakmir()) : ?>
                                                         <td></td>
                                                     <?php endif; ?>
@@ -127,10 +123,11 @@ $sum_current = [
                                                 ?>
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
+                                                        <td><?= $val['id_kas'] ?></td>
                                                         <td><?= $val['tgl_kas'] ?></td>
-                                                        <td><?= $val['ket_kaskeluar'] == "No Description" ? $val['ket_kasmasuk'] : $val['ket_kaskeluar'] ?></td>
+                                                        <td><?= $val['id_donasi'] == "No Donatur" &&  $val['id_infaq'] == "No Infaq" ? "" : ($val['id_donasi'] == "No Donatur" ? $val['id_infaq'] : $val['id_infaq']) ?></td>
+                                                        <td><?= $val['id_kaskeluar'] ?></td>
                                                         <td>Rp. <?= $val['jml_donasi'] == 0 ? number_format($val['jml_infaq'], 0, ',', '.') : number_format($val['jml_donasi'], 0, ',', '.') ?></td>
-
                                                         <td>Rp. <?= number_format($val['jml_transaksi_keluar'], 0, ',', '.'); ?></td>
                                                         <td>Rp. <?= number_format($val['saldo_kas'], 0, ',', '.'); ?></td>
                                                         <?php if (isAdminOrTakmir()) : ?>
@@ -159,6 +156,8 @@ $sum_current = [
                                             <tr class="border border-white">
                                                 <td></td>
                                                 <td></td>
+                                                <td></td>
+                                                <td></td>
                                                 <td>Total</td>
                                                 <td>Rp. <?= number_format($sum_current['total_kasmasuk'], 0, ',', '.'); ?></td>
                                                 <td>Rp. <?= number_format($sum_current['total_kaskeluar'], 0, ',', '.'); ?></td>
@@ -172,15 +171,23 @@ $sum_current = [
                             </div>
                         </div>
                     </div>
+                    <!-- Footer inside content-wrapper -->
+                    <footer class="footer mt-auto py-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 text-center text-md-left">
+                                </div>
+                                <div class="col-md-6 text-center text-md-right text-white row">
+                                    <!-- <span>Oleh :</span>
+                                <span>Deslia Miratunnisa (213210018)</span>
+                                <span>Sistem Informasi Akuntansi</span>
+                                <span>Univ Teknologi Digital Indonesia</span>
+                                <span>Yogyakarta</span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
-                <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
-                <!-- <footer class="footer">
-                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com </a>2021</span>
-                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Only the best <a href="https://www.bootstrapdash.com/" target="_blank"> Bootstrap dashboard </a> templates</span>
-                    </div>
-                </footer> -->
                 <!-- partial -->
             </div>
             <!-- main-panel ends -->

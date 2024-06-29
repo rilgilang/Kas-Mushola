@@ -82,13 +82,7 @@ $total = 0;
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <div class="py-2">
-                                    <p class="text-center fs-5">Laporan Kas Masuk</p>
-                                    <p class="text-center fs-5">Mushola Rahmatullah</p>
-                                    <?php if ($filter["start_date"] != "" && $filter["end_date"] != "") : ?>
-                                        <p class="text-center fs-5">Periode <?= $filter["start_date"] ?> s/d <?= $filter["end_date"] ?></p>
-                                    <?php endif; ?>
-                                </div>
+                                <h4 class="card-title">Kas Masuk</h4>
                                 <div class="table-responsive">
                                     <table class="table">
                                         <thead>
@@ -176,19 +170,28 @@ $total = 0;
                             </div>
                         </div>
                     </div>
+                    <!-- Footer inside content-wrapper -->
+                    <footer class="footer mt-auto py-3">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-6 text-center text-md-left">
+                                </div>
+                                <div class="col-md-6 text-center text-md-right text-white row">
+                                    <!-- <span>Oleh :</span>
+                                <span>Deslia Miratunnisa (213210018)</span>
+                                <span>Sistem Informasi Akuntansi</span>
+                                <span>Univ Teknologi Digital Indonesia</span>
+                                <span>Yogyakarta</span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
-                <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
-                <!-- <footer class="footer">
-                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="https://www.bootstrapdash.com/" target="_blank">bootstrapdash.com </a>2021</span>
-                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Only the best <a href="https://www.bootstrapdash.com/" target="_blank"> Bootstrap dashboard </a> templates</span>
-                    </div>
-                </footer> -->
-                <!-- partial -->
             </div>
-            <!-- main-panel ends -->
+
+            <!-- partial -->
         </div>
+        <!-- main-panel ends -->
     </div>
 
     <?php include("../component/plugin.php"); ?>
