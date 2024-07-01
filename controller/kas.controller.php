@@ -32,6 +32,8 @@ function getAllKas($filter)
     $query = "SELECT 
             k.id_kas,
             COALESCE(k.saldo_kas, 0) AS saldo_kas,
+            COALESCE(k.id_kasmasuk, '') AS id_kasmasuk,
+            COALESCE(k.id_kaskeluar, '') AS id_kaskeluar,
             COALESCE(k.tgl_kas, '0000-00-00') AS tgl_kas,
             COALESCE(k.created_at, '0000-00-00') AS kas_created_at,
             COALESCE(km.tgl_kasmasuk, '0000-00-00') AS tgl_kasmasuk,
@@ -45,7 +47,7 @@ function getAllKas($filter)
             COALESCE(i.jenis_infaq, 'No Infaq') AS jenis_infaq,
             COALESCE(i.tgl_infaq, '0000-00-00') AS tgl_infaq,
             COALESCE(i.jml_infaq, 0) AS jml_infaq,
-            COALESCE(kk.id_kaskeluar, '') AS id_kaskeluar,
+            -- COALESCE(kk.id_kaskeluar, '') AS id_kaskeluar,
             COALESCE(kk.tgl_kaskeluar, '0000-00-00') AS tgl_kaskeluar,
             COALESCE(kk.jml_kaskeluar, 0) AS jml_kaskeluar,
             COALESCE(kk.ket_kaskeluar, 'No Description') AS ket_kaskeluar,

@@ -125,7 +125,7 @@ $sum_current = [
                                                         <td><?= $key + 1 ?></td>
                                                         <td><?= $val['id_kas'] ?></td>
                                                         <td><?= $val['tgl_kas'] ?></td>
-                                                        <td><?= $val['id_donasi'] == "No Donatur" &&  $val['id_infaq'] == "No Infaq" ? "" : ($val['id_donasi'] == "No Donatur" ? $val['id_infaq'] : $val['id_infaq']) ?></td>
+                                                        <td><?= $val['id_kasmasuk'] ?></td>
                                                         <td><?= $val['id_kaskeluar'] ?></td>
                                                         <td>Rp. <?= $val['jml_donasi'] == 0 ? number_format($val['jml_infaq'], 0, ',', '.') : number_format($val['jml_donasi'], 0, ',', '.') ?></td>
                                                         <td>Rp. <?= number_format($val['jml_transaksi_keluar'], 0, ',', '.'); ?></td>
