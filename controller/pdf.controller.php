@@ -274,6 +274,7 @@ function kasKeluarTemplate($filter)
 
 function kasTemplate($filter)
 {
+    $latest = getLatestSaldo();
     $data = getAllKas($filter);
     $total = [
         "total_kasmasuk" => 0,
@@ -314,14 +315,14 @@ function kasTemplate($filter)
 
             $total['total_kasmasuk'] = $total['total_kasmasuk'] + $debit;
             $total['total_kaskeluar'] = $total['total_kaskeluar'] + $kredit;
-            $total['total_saldo'] = $total['total_saldo'] + $saldo;
+            // $total['total_saldo'] = $total['total_saldo'] + $saldo;
         }
 
         $value .= "<tr class=" . "border border-white" . ">";
         $value .= '<td colspan="3">Total</td>';
         $value .= "<td>Rp." . number_format($total['total_kasmasuk'], 0, ',', '.') . "</td>";
         $value .= "<td>Rp." . number_format($total['total_kaskeluar'], 0, ',', '.') . "</td>";
-        $value .= "<td>Rp." . number_format($total['total_saldo'], 0, ',', '.') . "</td>";
+        $value .= "<td>Rp." . number_format($latest['saldo_kas'], 0, ',', '.') . "</td>";
 
         $value .= "</tr>";
     }
