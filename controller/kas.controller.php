@@ -153,30 +153,50 @@ function updateKas($id, $data)
 {
     global $pdo;
 
+    $latestTrxType = $data['trx_type'];
 
-    $query = "UPDATE kas SET 
-        tgl_kas = ?,
-        id_kaskeluar = ?,
-        jml_kaskeluar = ?,
-        id_kasmasuk = ?,
-        jml_kasmasuk = ?,
-        saldo_kas = ?
-        WHERE id_kas = '$id'";
+    if ($latestTrxType == "kredit") {
+        $query = "UPDATE kas SET 
+            tgl_kas = ?,
+            id_kasmasuk = ?,
+            jml_kasmasuk = ?,
+            saldo_kas = ?
+            WHERE id_kas = '$id'";
 
-    try {
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([
-            $data['tgl_kas'],
-            $data['id_kaskeluar'],
-            $data['jml_kaskeluar'],
-            $data['id_kasmasuk'],
-            $data['jml_kasmasuk'],
-            $data['saldo_kas']
-        ]);
-        return "success";
-    } catch (PDOException $e) {
-        //error
-        return $e->getMessage();
+        try {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([
+                $data['tgl_kas'],
+                $data['id_kasmasuk'],
+                $data['jml_kasmasuk'],
+                $data['saldo_kas']
+            ]);
+            return "success";
+        } catch (PDOException $e) {
+            //error
+            return $e->getMessage();
+        }
+    } else {
+        $query = "UPDATE kas SET 
+            tgl_kas = ?,
+            id_kasmasuk = ?,
+            jml_kasmasuk = ?,
+            saldo_kas = ?
+            WHERE id_kas = '$id'";
+
+        try {
+            $stmt = $pdo->prepare($query);
+            $stmt->execute([
+                $data['tgl_kas'],
+                $data['id_kasmasuk'],
+                $data['jml_kasmasuk'],
+                $data['saldo_kas']
+            ]);
+            return "success";
+        } catch (PDOException $e) {
+            //error
+            return $e->getMessage();
+        }
     }
 }
 
