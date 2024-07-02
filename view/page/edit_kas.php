@@ -25,6 +25,8 @@ $error = '';
 $id_kas = $_GET['id'];
 $kasData = getKasById($id_kas);
 
+$trxType = $kasData['id_kaskeluar'] ? 'kredit' : 'debit';
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tgl_kas        = $_POST['tgl_kas'];
     $id_kasmasuk    = $_POST['id_kasmasuk'];
@@ -34,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $saldo          = $_POST['saldo_kas'];
 
     $data = [
-        "trx_type" => $_POST['trx_type'],
+        "trx_type" => $trxType,
         "tgl_kas" => $tgl_kas,
         "id_kasmasuk" => $id_kasmasuk,
         "jml_kasmasuk" => $jml_kasmasuk,
@@ -72,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="card">
                             <div class="card-body">
                                 <h4 class="card-title">Edit Kas</h4>
+                                <p><?= $trxType ?></p>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
                                 <form class="forms-sample" method="post" action="edit_kas.php?id=<?= $id_kas ?>">
                                     <div class="form-group row">
@@ -133,8 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </div>
                                     </div>
 
-                                    <input type="text" name="trx_type" id="trx_type" value="<?= $kasData['id_kaskeluar'] ? 'kredit' : 'debit' ?>" hidden>
-
                                     <button type="submit" class="btn btn-primary me-2">Submit</button>
                                     <a href="./kas.php" class="btn btn-light">Cancel</a>
                                 </form>
@@ -156,14 +157,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include("../component/plugin.php"); ?>
 
     <script>
-        function toggleFields() {
-            const lastSaldoFromDb = <?php echo json_encode($latestKas); ?>;
-            var idKasMasuk = document.getElementById('id_kasmasuk');
-            var idKasKeluar = document.getElementById('id_kaskeluar');
-            var jmlKasMasuk = document.getElementById('jml_kasmasuk');
-            var jmlKasKeluar = document.getElementById('jml_kaskeluar');
-            var saldoKas = document.getElementById('saldo_kas');
+        const trxType = "<?php echo $trxType; ?>";
 
+        const lastSaldoFromDb = <?php echo json_encode($latestKas); ?>;
+        var idKasMasuk = document.getElementById('id_kasmasuk');
+        var idKasKeluar = document.getElementById('id_kaskeluar');
+        var jmlKasMasuk = document.getElementById('jml_kasmasuk');
+        var jmlKasKeluar = document.getElementById('jml_kaskeluar');
+        var saldoKas = document.getElementById('saldo_kas');
+
+        function toggleFields() {
             // Set jumlah kasmasuk value based on selected id_kasmasuk
             var selectedOption = idKasMasuk.options[idKasMasuk.selectedIndex];
             jmlKasMasuk.value = selectedOption.getAttribute('data-jml') || "";
@@ -171,30 +174,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             var selectedOption = idKasKeluar.options[idKasKeluar.selectedIndex];
             jmlKasKeluar.value = selectedOption.getAttribute('data-jml') || "";
 
-            if (idKasMasuk.value != "") {
-                idKasKeluar.disabled = true;
-                jmlKasKeluar.disabled = true;
-                idKasKeluar.value = "";
-                jmlKasKeluar.value = "";
-                document.getElementById('trx_type').value = "debit";
-                saldoKas.value = lastSaldoFromDb.saldo_kas ? parseInt(lastSaldoFromDb.saldo_kas) + parseInt(jmlKasMasuk.value) : 0 + parseInt(jmlKasMasuk.value);
-            } else {
-                idKasKeluar.disabled = false;
-                jmlKasKeluar.disabled = false;
-            }
 
-            if (idKasKeluar.value != "") {
-                idKasMasuk.disabled = true;
-                jmlKasMasuk.disabled = true;
-                idKasMasuk.value = "";
-                jmlKasMasuk.value = "";
-                document.getElementById('trx_type').value = "kredit";
+            if (trxType == 'kredit') {
                 saldoKas.value = lastSaldoFromDb.saldo_kas ? parseInt(lastSaldoFromDb.saldo_kas) - parseInt(jmlKasKeluar.value) : 0 - parseInt(jmlKasKeluar.value);
             } else {
-                idKasMasuk.disabled = false;
-                jmlKasMasuk.disabled = false;
-            }
 
+                saldoKas.value = lastSaldoFromDb.saldo_kas ? parseInt(lastSaldoFromDb.saldo_kas) + parseInt(jmlKasMasuk.value) : 0 + parseInt(jmlKasMasuk.value);
+            }
+        }
+
+        if (trxType == 'kredit') {
+            idKasMasuk.disabled = true;
+            jmlKasMasuk.disabled = true;
+
+        } else {
+            idKasKeluar.disabled = true;
+            jmlKasKeluar.disabled = true;
         }
 
         document.getElementById('id_kasmasuk').addEventListener('change', toggleFields);
