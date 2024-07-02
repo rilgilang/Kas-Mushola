@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Edit Kas Keluar</h4>
+                                <h4 class="card-title">Edit Kas Keluar ?> </h4>
                                 <h4 class="card-title" id="selectedValue"></h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
                                 <form class="forms-sample" method="post" action="edit_kas_keluar.php?id=<?= $kas_keluar['id_kaskeluar'] ?>">
@@ -146,11 +146,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            toggleFields(); // Call on page load to set initial values
-            document.getElementById('id_transaksi_keluar').addEventListener('change', function() {
-                toggleFields();
-            });
+
+        document.getElementById('id_transaksi_keluar').addEventListener('change', function() {
+            toggleFields();
         });
     </script>
 </body>
