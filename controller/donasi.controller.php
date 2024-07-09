@@ -120,9 +120,20 @@ function updateDonasi($donasi_id, $data)
     SET nama_donatur = ?, jml_donasi = ?, tgl_donasi = ?
     WHERE id_donasi = ?;";
 
+    if ($data['file'] != "") {
+        $query = "UPDATE donasi
+            SET nama_donatur = ?, jml_donasi = ?, tgl_donasi = ?, file = ?
+            WHERE id_donasi = ?;";
+    }
+
     try {
         $stmt = $pdo->prepare($query);
-        $stmt->execute([$data['nama_donatur'], $data['jml_donasi'], $data['tgl_donasi'], $donasi_id]);
+        if ($data['file'] != "") {
+            $stmt->execute([$data['nama_donatur'], $data['jml_donasi'], $data['tgl_donasi'], $data['file'], $donasi_id]);
+        } else {
+            $stmt->execute([$data['nama_donatur'], $data['jml_donasi'], $data['tgl_donasi'], $donasi_id]);
+        }
+
         header("Location: donasi.php");
     } catch (PDOException $e) {
         //error

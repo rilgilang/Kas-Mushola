@@ -3,6 +3,7 @@ include '../../bootstrap/db.php';
 include '../../middleware/auth.php';
 include '../../controller/donasi.controller.php';
 include '../../controller/kas.controller.php';
+include '../../controller/file.controller.php';
 
 checkLogin();
 if (!isAdminOrTakmir()) {
@@ -23,15 +24,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = [
         "nama_donatur" => $nama_donatur,
         "tgl_donasi" => $tgl_donasi,
-        "jml_donasi" => $jml_donasi,
+        "file" => "",
     ];
 
-    $result = updatedonasi($donasi_id, $data);
+    // Handle file upload
+    $image = ProcessAndSaveImage($_FILES['image']);
 
-    if ($result == "success") {
-        header("Refresh:0");
+    if (!$image['status']) {
+        $error = $image['error'];
     } else {
-        $error = $result;
+        $data['file'] = $image['path'];
+        $result = updatedonasi($donasi_id, $data);
+
+        if ($result == "success") {
+            header("Refresh:0");
+        } else {
+            $error = $result;
+        }
     }
 }
 ?>
@@ -59,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <div class="card-body">
                                             <h4 class="card-title">Edit donasi</h4>
                                             <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
-                                            <form class="forms-sample" method="post" action="edit_donasi.php?id=<?= $donasi_id ?>">
+                                            <form class="forms-sample" method="post" action="edit_donasi.php?id=<?= $donasi_id ?>" enctype="multipart/form-data">
 
                                                 <div class="form-group row">
                                                     <label for="nama_donatur" class="col-sm-3 col-form-label">Id Donasi</label>
@@ -86,6 +95,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <label for="tgl_donasi" class="col-sm-3 col-form-label">Tanggal</label>
                                                     <div class="col-sm-3">
                                                         <input type="date" class="form-control" id="tgl_donasi" name="tgl_donasi" value="<?= $donasi['tgl_donasi'] ?>">
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="exampleInputEmail2" class="col-sm-3 col-form-label">Bukti Donasi</label>
+                                                    <div class="col-sm-9">
+                                                        <input type="file" class="form-control" id="exampleInputEmail2" name="image">
                                                     </div>
                                                 </div>
 
