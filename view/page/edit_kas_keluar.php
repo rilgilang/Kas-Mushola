@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <div class="col-sm-3 align-self-center">
                                             <select class="form-control" id="id_transaksi_keluar" name="id_transaksi_keluar">
                                                 <?php foreach ($pengeluaranList as $key => $kaskeluar) { ?>
-                                                    <option value="<?= $kaskeluar['id_transaksi_keluar'] ?>" data-jenis="<?= $kaskeluar['jenis_transaksi_keluar'] ?>" data-jml="<?= $kaskeluar['jml_transaksi_keluar'] ?>"><?= $kaskeluar['id_transaksi_keluar'] ?></option>
+                                                    <option value="<?= $kaskeluar['id_transaksi_keluar'] ?>" data-jenis="<?= $kaskeluar['jenis_transaksi_keluar'] ?>" data-jml="<?= $kaskeluar['jml_transaksi_keluar'] ?>" <?= $kas_keluar['id_transaksi_keluar'] == $kaskeluar['id_transaksi_keluar'] ? 'selected' : '' ?>><?= $kaskeluar['id_transaksi_keluar'] ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
