@@ -109,7 +109,7 @@ $filter = [
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
                                                         <td><?= $val['id_transaksi_keluar'] ?></td>
-                                                        <td><?= $val['tgl_transaksi_keluar'] ?></td>
+                                                        <td><?= date_format(date_create($val['tgl_transaksi_keluar']), "d-m-Y")  ?></td>
                                                         <td><?= $val['jenis_transaksi_keluar'] ?></td>
                                                         <td>Rp. <?= number_format($val['jml_transaksi_keluar'], 0, ',', '.'); ?></td>
                                                         <?php if (isAdminOrTakmir()) : ?>

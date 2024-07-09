@@ -124,7 +124,7 @@ $sum_current = [
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
                                                         <td><?= $val['id_kas'] ?></td>
-                                                        <td><?= $val['tgl_kas'] ?></td>
+                                                        <td><?= date_format(date_create($val['tgl_kas']), "d-m-Y")   ?></td>
                                                         <td><?= $val['id_kasmasuk'] ?></td>
                                                         <td><?= $val['id_kaskeluar'] ?></td>
                                                         <td>Rp. <?= $val['jml_donasi'] == 0 ? number_format($val['jml_infaq'], 0, ',', '.') : number_format($val['jml_donasi'], 0, ',', '.') ?></td>

@@ -110,7 +110,7 @@ $filter = [
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
                                                         <td><?= $val['id_donasi'] ?></td>
-                                                        <td><?= $val['tgl_donasi'] ?></td>
+                                                        <td><?= date_format(date_create($val['tgl_donasi']), "d-m-Y")  ?></td>
                                                         <td><?= $val['nama_donatur'] ?></td>
                                                         <td>Rp. <?= number_format($val['jml_donasi'], 0, ',', '.'); ?></td>
 

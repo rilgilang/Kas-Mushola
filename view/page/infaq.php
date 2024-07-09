@@ -115,7 +115,7 @@ $filter = [
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
                                                         <td><?= $val['id_infaq'] ?></td>
-                                                        <td><?= $val['tgl_infaq'] ?></td>
+                                                        <td><?= date_format(date_create($val['tgl_infaq']), "d-m-Y") ?></td>
                                                         <td><?= $val['jenis_infaq'] ?></td>
                                                         <td>Rp. <?= number_format($val['jml_infaq'], 0, ',', '.'); ?></td>
                                                         <?php if (isAdminOrTakmir()) : ?>

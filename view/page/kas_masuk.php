@@ -125,7 +125,7 @@ $total = 0;
                                                     <tr>
                                                         <td><?= $key + 1 ?></td>
                                                         <td><?= $val['id_kasmasuk'] ?></td>
-                                                        <td><?= $val['tgl_kasmasuk'] ?></td>
+                                                        <td><?= date_format(date_create($val['tgl_kasmasuk']), "d-m-Y")  ?></td>
                                                         <td><?= $val['id_infaq'] ?></td>
                                                         <td><?= $val['id_donasi'] ?></td>
                                                         <td><?= $val['ket_kasmasuk'] ?></td>

@@ -123,7 +123,7 @@ $total = 0;
                                                         <td><?= $key + 1 ?></td>
                                                         <td><?= $val['id_kaskeluar'] ?></td>
                                                         <td><?= $val['id_transaksi_keluar'] ?></td>
-                                                        <td><?= $val['tgl_kaskeluar'] ?></td>
+                                                        <td><?= date_format(date_create($val['tgl_kaskeluar']), "d-m-Y")  ?></td>
                                                         <td><?= $val['ket_kaskeluar'] ?></td>
                                                         <td>Rp. <?= number_format($val['jml_kaskeluar'], 0, ',', '.'); ?></td>
 
