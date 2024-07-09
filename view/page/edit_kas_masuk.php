@@ -84,8 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <div class="col-sm-3 align-self-center">
                                             <select class="form-control" id="jenis_kasmasuk" name="jenis_kasmasuk">
                                                 <option value="-">Pilih salah satu</option>
-                                                <option value="infaq">Infaq</option>
-                                                <option value="donasi">Donasi</option>
+                                                <option value="infaq" <?= $kas_masuk['id_infaq'] != "" ? 'selected' : '' ?>>Infaq</option>
+                                                <option value="donasi" <?= $kas_masuk['id_donasi'] != "" ? 'selected' : '' ?>>Donasi</option>
                                             </select>
                                         </div>
                                     </div>
