@@ -54,16 +54,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="col-md-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title">Tambah User</h4>
+                                <h4 class="card-title">Tambah User </h4>
                                 <p class="text-danger"><?= $error !== "" ? $error : "" ?></p>
                                 <form class="forms-sample" method="post" action="tambah_user.php">
 
-                                    <div class="form-group row">
+                                    <!-- <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">ID User</label>
                                         <div class="col-sm-9">
                                             <input type="text" class="form-control" id="exampleInputUsername2" placeholder="ID User" name="id_user">
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="form-group row">
                                         <label for="exampleInputUsername2" class="col-sm-3 col-form-label">Nama</label>
