@@ -11,7 +11,7 @@ if (!isAdminOrTakmir()) {
 
 $latestInfaq = getLatestInfaq()['id_infaq'];
 
-$lastId = generateInfaqId($lastId);
+$lastId = generateInfaqId($latestInfaq);
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
