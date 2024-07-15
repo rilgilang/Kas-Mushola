@@ -38,6 +38,14 @@ function addKasKeluar($data)
 
     global $pdo;
 
+    $stmt = $pdo->prepare("SELECT * FROM kas_keluar WHERE id_transaksi_keluar = ? LIMIT 1;");
+    $stmt->execute([$data['id_transaksi_keluar']]);
+    $kasKeluar = $stmt->fetch();
+    
+    if (!empty($kasKeluar)) {
+        return "data id transaksi keluar telah di gunakan";
+    }
+
     $query = "INSERT INTO kas_keluar (id_kaskeluar, tgl_kaskeluar, jenis_kaskeluar, ket_kaskeluar, jml_kaskeluar, id_transaksi_keluar) VALUES (?, ?, ?, ?, ?, ?)";
 
     try {
@@ -141,5 +149,22 @@ function deleteKasKeluar($id)
     } catch (PDOException $e) {
         //error
         return $e->getMessage();
+    }
+}
+
+
+function generateKasKeluarId($lastId)
+{
+    $result = "KK";
+    $newNumber = intval(substr($lastId, 3)) + 1;
+    if (strlen($newNumber) <= 3) {
+        for ($x = 0; $x <= 3 - strlen($newNumber); $x++) {
+            $result = $result . "0";
+        }
+        $result = $result . $newNumber;
+        return $result;
+    } else {
+        $result = $newNumber;
+        return $result;
     }
 }

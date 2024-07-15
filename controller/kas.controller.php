@@ -241,6 +241,23 @@ function addKas($data)
 {
     global $pdo;
 
+    $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kasmasuk = ? LIMIT 1;");
+    $stmt->execute([$data['id_kasmasuk']]);
+    $kasMasuk = $stmt->fetch();
+
+    if (!empty($kasMasuk)) {
+        return "data id kas masuk telah di gunakan";
+    }
+
+
+    $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kaskeluar = ? LIMIT 1;");
+    $stmt->execute([$data['id_kaskeluar']]);
+    $kasKeluar = $stmt->fetch();
+
+    if (!empty($kasKeluar)) {
+        return "data id kas keluar telah di gunakan";
+    }
+
     // Determine the latest transaction type
     $latestTrxType = $data['trx_type'];
 

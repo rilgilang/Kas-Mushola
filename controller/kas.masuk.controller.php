@@ -32,21 +32,6 @@ function generateKasMasukId($lastId)
     }
 }
 
-function generateKasKeluarId($lastId)
-{
-    $result = "KK";
-    $newNumber = intval(substr($lastId, 3)) + 1;
-    if (strlen($newNumber) <= 3) {
-        for ($x = 0; $x <= 3 - strlen($newNumber); $x++) {
-            $result = $result . "0";
-        }
-        $result = $result . $newNumber;
-        return $result;
-    } else {
-        $result = $newNumber;
-        return $result;
-    }
-}
 
 function syncKasMasuk($data, $created_at)
 {
@@ -88,10 +73,20 @@ function addKasMasuk($data)
 {
 
     global $pdo;
+    
 
     $query = "INSERT INTO kas_masuk (id_kasmasuk, tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_donasi) VALUES (?, ?, ?, ?, ?)";
 
     if ($data['jenis_kasmasuk'] == "infaq") {
+
+        $stmt = $pdo->prepare("SELECT * FROM kas_masuk WHERE id_infaq = ? LIMIT 1;");
+        $stmt->execute([$data['id_infaq']]);
+        $cek_infaq = $stmt->fetch();
+    
+        if (!empty($cek_infaq)) {
+            return "data id infaq telah di gunakan";
+        }
+
         //insert kas_masuk
         $query = "INSERT INTO kas_masuk (id_kasmasuk, tgl_kasmasuk, jml_kasmasuk, ket_kasmasuk, id_infaq) VALUES (?, ?, ?, ?, ?)";
 
@@ -103,6 +98,14 @@ function addKasMasuk($data)
             //error
             return $e->getMessage();
         }
+    }
+
+    $stmt = $pdo->prepare("SELECT * FROM kas_masuk WHERE id_donasi = ? LIMIT 1;");
+    $stmt->execute([$data['id_donasi']]);
+    $cek_donasi = $stmt->fetch();
+
+    if (!empty($cek_donasi)) {
+        return "data id donasi telah di gunakan";
     }
 
     try {

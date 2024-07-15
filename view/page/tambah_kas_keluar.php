@@ -17,10 +17,13 @@ $filter = [
 
 $kasKeluarList = getAllPengeluaran($filter);
 
+$latestKasKeluar = getLatestKasKeluar()['id_kaskeluar'];
+$lastId = generateKasKeluarId($latestKasKeluar);
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $id_kaskeluar = $_POST['id_kaskeluar'];
+    $id_kaskeluar = $lastId;
     $jenis_kaskeluar = $_POST['jenis_kaskeluar'];
     $id_transaksi_keluar = $_POST['id_transaksi_keluar'];
     $tgl_kaskeluar = $_POST['tgl_kaskeluar'];
@@ -68,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">ID Kas Keluar</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="id_kaskeluar">
+                                            <input type="text" class="form-control" name="id_kaskeluar" value="<?= $lastId ?>" disabled>
                                         </div>
                                     </div>
 

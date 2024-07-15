@@ -9,10 +9,14 @@ if (!isAdminOrTakmir()) {
     header("Location: donasi.php");
 }
 
+$latestInfaq = getLatestInfaq()['id_infaq'];
+
+$lastId = generateInfaqId($lastId);
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $id_infaq = $_POST['id_infaq'];
+    $id_infaq = $lastId;
     $jenis_infaq = $_POST['jenis_infaq'];
     $tgl_infaq = $_POST['tgl_infaq'];
     $jml_infaq = $_POST['jml_infaq'];
@@ -58,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="nama_donatur" class="col-sm-3 col-form-label">Id Infaq</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="id_infaq" name="id_infaq">
+                                            <input type="text" class="form-control" id="id_infaq" name="id_infaq" value="<?= $lastId ?>" disabled>
                                         </div>
                                     </div>
 

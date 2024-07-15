@@ -21,10 +21,12 @@ $sumKasMasuk = sumAllKasMasuk();
 $sumKasKeluar = sumAllKasKeluar();
 $latestKas = getLatestSaldo();
 
+$latestId = generateKasId($latestKas['id_kas']);
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $id_kas = $_POST['id_kas'];
+    $id_kas = $latestId;
     $tgl_kas = $_POST['tgl_kas'];
     $id_kasmasuk = $_POST['trx_type'] == "debit" ? $_POST['id_kasmasuk'] : "";
     $jml_kasmasuk = $_POST['trx_type'] == "debit" ? $_POST['jml_kasmasuk'] : "";
@@ -75,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">ID Kas</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="id_kas">
+                                            <input type="text" class="form-control" name="id_kas" value="<?= $latestId ?>" disabled>
                                         </div>
                                     </div>
 

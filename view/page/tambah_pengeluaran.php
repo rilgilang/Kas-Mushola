@@ -7,10 +7,13 @@ include '../../controller/file.controller.php';
 
 checkLogin();
 
+$lastPengeluaran = getLatestPengeluaran()['id_transaksi_keluar'];
+$lastId = generatePengeluaranId($lastId);
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $id_transaksi_keluar = $_POST['id_transaksi_keluar'];
+    $id_transaksi_keluar = $lastId;
     $jenis_transaksi_keluar = $_POST['jenis_transaksi_keluar'];
     $tgl_transaksi_keluar = $_POST['tgl_transaksi_keluar'];
     $jml_transaksi_keluar = $_POST['jml_transaksi_keluar'];
@@ -66,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">ID Detail Transaksi Keluar</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="exampleInputEmail2" name="id_transaksi_keluar">
+                                            <input type="text" class="form-control" id="exampleInputEmail2" name="id_transaksi_keluar" value="<?= $lastId ?>" disabled>
                                         </div>
                                     </div>
 

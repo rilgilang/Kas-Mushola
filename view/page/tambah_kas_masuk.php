@@ -18,10 +18,14 @@ $filter = [
 $infaqList = getAllInfaq($filter);
 $donasiList = getAllDonasi($filter);
 
+
+$latestKasMasuk = getLatestKasMasuk()['id_kasmasuk'];
+$lastId = generateKasMasukId($latestKasMasuk);
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $id_kasmasuk = $_POST['id_kasmasuk'];
+    $id_kasmasuk = $lastId;
     $tgl_kasmasuk = $_POST['tgl_kasmasuk'];
     $jenis_kasmasuk = $_POST['jenis_kasmasuk'];
     $ket_kasmasuk = $_POST['ket_kasmasuk'];
@@ -75,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="exampleInputEmail2" class="col-sm-3 col-form-label">ID Kas Masuk</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" name="id_kasmasuk">
+                                            <input type="text" class="form-control" name="id_kasmasuk" value="<?= $lastId ?>" disabled>
                                         </div>
                                     </div>
 

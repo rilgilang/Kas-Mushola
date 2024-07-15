@@ -10,10 +10,13 @@ if (!isAdminOrTakmir()) {
     header("Location: donasi.php");
 }
 
+$latestDonasi = getLatestDonasi()['id_donasi'];
+$lastId = generateDonasiId($latestDonasi);
+
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    $id_donasi = $_POST['id_donasi'];
+    $id_donasi = $lastId;
     $nama_donatur = $_POST['nama_donatur'];
     $tgl_donasi = $_POST['tgl_donasi'];
     $jml_donasi = $_POST['jml_donasi'];
@@ -68,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group row">
                                         <label for="nama_donatur" class="col-sm-3 col-form-label">Id Donasi</label>
                                         <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="id_donasi" name="id_donasi">
+                                            <input type="text" class="form-control" id="id_donasi" name="id_donasi" value="<?= $lastId ?>" disabled>
                                         </div>
                                     </div>
 
