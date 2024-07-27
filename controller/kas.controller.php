@@ -234,26 +234,43 @@ function deleteKas($kas_id)
 {
     global $pdo;
 
+    // Get the kas entry to be deleted
     $kas = getKasById($kas_id);
-    dif_value
 
-    $operator = $kas['id_kasmasuk'] == false ? "-" : "+";
+    // Determine the difference value and the operator
+    $dif_value = 0;
+    if ($kas['id_kasmasuk']) {
+        $dif_value = $kas['jml_kasmasuk'];
+    } else {
+        $dif_value = -$kas['jml_kaskeluar'];
+    }
 
-    syncSaldo("(saldo_kas $operator $dif_value)", $infaq['created_at']);
-
-    //update kas
-    $query = "DELETE FROM kas
-       WHERE id_kas = ?;";
+    // Update saldo_kas for subsequent entries
+    $queryUpdate = "UPDATE kas
+                    SET saldo_kas = saldo_kas - ?
+                    WHERE created_at > ?";
 
     try {
-        $stmt = $pdo->prepare($query);
-        $stmt->execute([$kas_id]);
+        $stmtUpdate = $pdo->prepare($queryUpdate);
+        $stmtUpdate->execute([$dif_value, $kas['created_at']]);
+    } catch (PDOException $e) {
+        // error
+        return $e->getMessage();
+    }
+
+    // Delete the kas entry
+    $queryDelete = "DELETE FROM kas WHERE id_kas = ?";
+
+    try {
+        $stmtDelete = $pdo->prepare($queryDelete);
+        $stmtDelete->execute([$kas_id]);
         header("Location: kas.php");
     } catch (PDOException $e) {
-        //error
+        // error
         return $e->getMessage();
     }
 }
+
 
 
 function getLatestSaldo()
