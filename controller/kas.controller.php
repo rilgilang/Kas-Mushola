@@ -98,6 +98,36 @@ function getKasById($kas_id)
     return $kas;
 }
 
+function getKasByKasMasukId($kasmasuk_id)
+{
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kasmasuk = ? LIMIT 1");
+    $stmt->execute([$kasmasuk_id]);
+    $kas = $stmt->fetch();
+
+    if (empty($kas)) {
+        return false;
+    }
+
+    return $kas;
+}
+
+function getKasByKasKeluarId($kaskeluar_id)
+{
+    global $pdo;
+
+    $stmt = $pdo->prepare("SELECT * FROM kas WHERE id_kaskeluar = ? LIMIT 1");
+    $stmt->execute([$kaskeluar_id]);
+    $kas = $stmt->fetch();
+
+    if (empty($kas)) {
+        return false;
+    }
+
+    return $kas;
+}
+
 function getLatestKas()
 {
 
@@ -203,6 +233,13 @@ function updateKas($id, $data)
 function deleteKas($kas_id)
 {
     global $pdo;
+
+    $kas = getKasById($kas_id);
+    dif_value
+
+    $operator = $kas['id_kasmasuk'] == false ? "-" : "+";
+
+    syncSaldo("(saldo_kas $operator $dif_value)", $infaq['created_at']);
 
     //update kas
     $query = "DELETE FROM kas
@@ -330,4 +367,119 @@ FROM
         //error
         return $e->getMessage();
     }
+}
+
+function getAllRelationKas($id)
+{
+    $id_code = substr($id, 0, 2);
+    $id_type = '';
+
+    if (preg_match('~[0-9]+~', $id_code)) {
+        $id_code = "id_kas";
+    }
+
+    $result = [
+        'donasi' => null,
+        'infaq' => null,
+        'pengeluaran' => null,
+        'kasmasuk' => null,
+        'kaskeluar' => null,
+        'kas' => null,
+    ];
+
+    switch ($id_code) {
+        case 'KD':
+            $id_type = 'id_donasi';
+
+
+            $donasi = getDetailedDonasiById($id);
+            $kasmasuk = getKasMasukByDonasiId($donasi['id_donasi']);
+            $kas = getKasByKasMasukId($kasmasuk['id_kas']);
+
+            $result = ['donasi' => $donasi, 'kasmasuk' => $kasmasuk, 'kas' => $kas];
+            break; // Add break to avoid fallthrough
+        case 'KI':
+            $id_type = 'id_infaq';
+
+            $infaq = getDetailedInfaqbyId($id);
+            $kasmasuk = getKasMasukByInfaqId($infaq['id_infaq']);
+            $kas = getKasByKasMasukId($kasmasuk['id_kasmasuk']);
+
+            $result = ['infaq' => $infaq, 'kasmasuk' => $kasmasuk, 'kas' => $kas];
+            break;
+        case 'DK':
+            $id_type = 'id_transaksi_keluar';
+
+            $pengeluaran = getDetailedPengeluaranById($id);
+            $kas_keluar = getKasKeluarByPengeluaranId($id);
+            $kas = getKasByKasKeluarId($kas_keluar['id_kaskeluar']);
+
+            $result = ['pengeluaran' => $pengeluaran, 'kaskeluar' => $kas_keluar, 'kas' => $kas];
+            break;
+        case 'KM':
+            $id_type = 'id_kasmasuk';
+
+            $kasmasuk = getKasMasukById($id);
+            $infaq = getDetailedInfaqbyId($id);
+            $kas = getKasByKasMasukId($kasmasuk['id_kas']);
+
+
+
+            //donasi
+            if (!$kasmasuk['id_infaq']) {
+                $donasi = getDetailedDonasiById($kasmasuk['id_donasi']);
+                $result = ['donasi' => $infaq, 'kasmasuk' => $kasmasuk, 'kas' => $kas];
+                break;
+            }
+
+            //infaq
+            $infaq = getDetailedInfaqbyId($kasmasuk['id_infaq']);
+            $result = ['infaq' => $infaq, 'kasmasuk' => $kasmasuk, 'kas' => $kas];
+            break;
+        case 'KK':
+            $id_type = 'id_kaskeluar';
+            $kas_keluar = getKasKeluarById($id);
+            $pengeluaran = getDetailedPengeluaranById($kas_keluar['id_transaksi_keluar']);
+            $kas = getKasByKasKeluarId($kas_keluar['id_kaskeluar']);
+
+            $result = ['pengeluaran' => $pengeluaran, 'kaskeluar' => $kas_keluar, 'kas' => $kas];
+
+            break;
+        default:
+            return false;
+    }
+
+
+    // Construct the SQL query
+    $sql = "
+    SELECT
+        kas.*,
+        infaq.*,
+        donasi.*,
+        kas_masuk.*,
+        kas_keluar.*,
+        detail_transaksi_keluar.*
+    FROM
+        kas
+        LEFT JOIN infaq ON infaq.id_infaq = :id AND :id_type = 'id_infaq'
+        LEFT JOIN kas_masuk ON (kas_masuk.id_infaq = infaq.id_infaq OR kas_masuk.id_donasi = donasi.id_donasi) AND (:id_type = 'id_infaq' OR :id_type = 'id_donasi')
+        LEFT JOIN donasi ON donasi.id_donasi = :id AND :id_type = 'id_donasi'
+        LEFT JOIN kas_keluar ON kas_keluar.id_kaskeluar = :id AND :id_type = 'id_kaskeluar'
+        LEFT JOIN detail_transaksi_keluar ON detail_transaksi_keluar.id_transaksi_keluar = kas_keluar.id_transaksi_keluar AND :id_type = 'id_kaskeluar'
+    WHERE
+        (:id_type = 'id_infaq' AND infaq.id_infaq = :id) OR
+        (:id_type = 'id_donasi' AND donasi.id_donasi = :id) OR
+        (:id_type = 'id_kasmasuk' AND kas_masuk.id_kasmasuk = :id) OR
+        (:id_type = 'id_kas' AND kas.id_kas = :id) OR
+        (:id_type = 'id_transaksi_keluar' AND detail_transaksi_keluar.id_transaksi_keluar = :id) OR
+        (:id_type = 'id_kaskeluar' AND kas_keluar.id_kaskeluar = :id);
+    ";
+
+    global $pdo;
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['id' => $id, 'id_type' => $id_type]);
+    $result = $stmt->fetch();
+
+    return $result;
 }
